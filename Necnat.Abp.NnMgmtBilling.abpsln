@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "Necnat.Abp.NnMgmtBilling": {
+      "path": "Necnat.Abp.NnMgmtBilling.abpmdl"
+    }
+  }
+}

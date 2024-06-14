@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.prod.json",
+  "compilerOptions": {
+    "paths": {
+      "@necnat.Abp/nn-mgmt-billing": [
+        "projects/nn-mgmt-billing/src/public-api.ts"
+      ],
+      "@necnat.Abp/nn-mgmt-billing/config": [
+        "projects/nn-mgmt-billing/config/src/public-api.ts"
+      ],
+      "@proxy": ["projects/nn-mgmt-billing/src/lib/proxy/index.ts"],
+      "@proxy/*": ["projects/nn-mgmt-billing/src/lib/proxy/*"]
+    }
+  }
+}

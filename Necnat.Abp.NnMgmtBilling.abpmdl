@@ -1,0 +1,111 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "Necnat.Abp.NnMgmtBilling.Domain.Shared": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.Domain.Shared/Necnat.Abp.NnMgmtBilling.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.Domain": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.Domain/Necnat.Abp.NnMgmtBilling.Domain.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.Application.Contracts": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.Application.Contracts/Necnat.Abp.NnMgmtBilling.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.Application": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.Application/Necnat.Abp.NnMgmtBilling.Application.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.EntityFrameworkCore": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.EntityFrameworkCore/Necnat.Abp.NnMgmtBilling.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.MongoDB": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.MongoDB/Necnat.Abp.NnMgmtBilling.MongoDB.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.HttpApi": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.HttpApi/Necnat.Abp.NnMgmtBilling.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.HttpApi.Client": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.HttpApi.Client/Necnat.Abp.NnMgmtBilling.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.TestBase": {
+      "path": "test/Necnat.Abp.NnMgmtBilling.TestBase/Necnat.Abp.NnMgmtBilling.TestBase.abppkg",
+      "folder": "test"
+    },
+    "Necnat.Abp.NnMgmtBilling.EntityFrameworkCore.Tests": {
+      "path": "test/Necnat.Abp.NnMgmtBilling.EntityFrameworkCore.Tests/Necnat.Abp.NnMgmtBilling.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "Necnat.Abp.NnMgmtBilling.MongoDB.Tests": {
+      "path": "test/Necnat.Abp.NnMgmtBilling.MongoDB.Tests/Necnat.Abp.NnMgmtBilling.MongoDB.Tests.abppkg",
+      "folder": "test"
+    },
+    "Necnat.Abp.NnMgmtBilling.Domain.Tests": {
+      "path": "test/Necnat.Abp.NnMgmtBilling.Domain.Tests/Necnat.Abp.NnMgmtBilling.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "Necnat.Abp.NnMgmtBilling.Application.Tests": {
+      "path": "test/Necnat.Abp.NnMgmtBilling.Application.Tests/Necnat.Abp.NnMgmtBilling.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "Necnat.Abp.NnMgmtBilling.HttpApi.Host": {
+      "path": "host/Necnat.Abp.NnMgmtBilling.HttpApi.Host/Necnat.Abp.NnMgmtBilling.HttpApi.Host.abppkg",
+      "folder": "host"
+    },
+    "Necnat.Abp.NnMgmtBilling.Web": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.Web/Necnat.Abp.NnMgmtBilling.Web.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/Necnat.Abp.NnMgmtBilling.HttpApi.Client.ConsoleTestApp/Necnat.Abp.NnMgmtBilling.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "Necnat.Abp.NnMgmtBilling.Web.Host": {
+      "path": "host/Necnat.Abp.NnMgmtBilling.Web.Host/Necnat.Abp.NnMgmtBilling.Web.Host.abppkg",
+      "folder": "host"
+    },
+    "Necnat.Abp.NnMgmtBilling.AuthServer": {
+      "path": "host/Necnat.Abp.NnMgmtBilling.AuthServer/Necnat.Abp.NnMgmtBilling.AuthServer.abppkg",
+      "folder": "host"
+    },
+    "Necnat.Abp.NnMgmtBilling.Host.Shared": {
+      "path": "host/Necnat.Abp.NnMgmtBilling.Host.Shared/Necnat.Abp.NnMgmtBilling.Host.Shared.abppkg",
+      "folder": "host"
+    },
+    "Necnat.Abp.NnMgmtBilling.Web.Unified": {
+      "path": "host/Necnat.Abp.NnMgmtBilling.Web.Unified/Necnat.Abp.NnMgmtBilling.Web.Unified.abppkg",
+      "folder": "host"
+    },
+    "Necnat.Abp.NnMgmtBilling.Blazor": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.Blazor/Necnat.Abp.NnMgmtBilling.Blazor.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.Blazor.Host": {
+      "path": "host/Necnat.Abp.NnMgmtBilling.Blazor.Host/Necnat.Abp.NnMgmtBilling.Blazor.Host.abppkg",
+      "folder": "host"
+    },
+    "Necnat.Abp.NnMgmtBilling.Blazor.Server": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.Blazor.Server/Necnat.Abp.NnMgmtBilling.Blazor.Server.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.Blazor.WebAssembly": {
+      "path": "src/Necnat.Abp.NnMgmtBilling.Blazor.WebAssembly/Necnat.Abp.NnMgmtBilling.Blazor.WebAssembly.abppkg",
+      "folder": "src"
+    },
+    "Necnat.Abp.NnMgmtBilling.Blazor.Server.Host": {
+      "path": "host/Necnat.Abp.NnMgmtBilling.Blazor.Server.Host/Necnat.Abp.NnMgmtBilling.Blazor.Server.Host.abppkg",
+      "folder": "host"
+    }
+  }
+}
