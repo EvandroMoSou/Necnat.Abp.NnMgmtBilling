@@ -2,7 +2,7 @@
 
 public static class NnMgmtBillingDbProperties
 {
-    public static string DbTablePrefix { get; set; } = "NnMgmtBilling";
+    public static string DbTablePrefix { get; set; } = "Blln";
 
     public static string? DbSchema { get; set; } = null;
 

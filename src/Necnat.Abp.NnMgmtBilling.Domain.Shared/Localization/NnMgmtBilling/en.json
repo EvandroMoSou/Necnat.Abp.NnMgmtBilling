@@ -1,7 +1,15 @@
 {
   "culture": "en",
   "texts": {
-    "MyAccount":  "My account",
-    "SamplePageMessage": "A sample page for the NnMgmtBilling module"
+    "MyAccount": "My account",
+    "SamplePageMessage": "A sample page for the NnMgmtBilling module",
+
+    "Menu:BillingManagement": "Billing",
+    "Menu:BillingManagement:Configuration": "Configuration",
+    "Menu:BillingManagement:Configuration:BillingClient": "Client",
+    "Menu:BillingManagement:Configuration:BillingEndpoint": "Endpoint",
+    "Menu:BillingManagement:Configuration:BillingContract": "Contract",
+    "Menu:BillingManagement:Configuration:Sku": "SKU",
+    "Menu:BillingManagement:Dashboard": "Dashboard"
   }
 }
