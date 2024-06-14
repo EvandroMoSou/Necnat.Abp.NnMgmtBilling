@@ -1,0 +1,175 @@
+﻿@page "/BillingManagement/Configuration/BillingEndpoints"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using System.Collections.ObjectModel
+@using Necnat.Abp.NnLibCommon.Localization
+@using Necnat.Abp.NnMgmtBilling.Blazor.Components
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using Necnat.Abp.NnMgmtBilling.Permissions
+@using Volo.Abp
+@using Volo.Abp.Application.Dtos
+@using Volo.Abp.AspNetCore.Components.Web
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.Identity
+@attribute [Authorize(NnMgmtBillingPermissions.PrmBillingEndpoint.Default)]
+@inherits AbpCrudPageBase<IBillingEndpointAppService, BillingEndpointDto, Guid, BillingEndpointResultRequestDto>
+@inject IStringLocalizer<NnLibCommonResource> NL
+@inject IStringLocalizer<NnMgmtBillingResource> BML
+@inject IBillingEndpointAppService AppService
+
+<Card>
+    <CardHeader>
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <h2>@BML["Endpoints"]</h2>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsAuto">
+                @if (HasCreatePermission)
+                {
+                    <Button Color="Color.Primary"
+                            Clicked="OpenCreateModalAsync">
+                        @NL["New"]
+                    </Button>
+                }
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="BillingEndpointDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  CurrentPage="CurrentPage"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="BillingEndpointDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="BillingEndpointDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="BillingEndpointDto"
+                                          Text="@NL["Edit"]"
+                                          Visible=HasUpdatePermission   
+                                          Clicked="() => OpenEditModalAsync(context)" />
+                            <EntityAction TItem="BillingEndpointDto"
+                                          Text="@NL["Delete"]"
+                                          Visible=HasDeletePermission
+                                          Clicked="() => DeleteEntityAsync(context)"
+                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+                <DataGridColumn TItem="BillingEndpointDto"
+                                Field="@nameof(BillingEndpointDto.DisplayName)"
+                                Caption="@L[BillingEndpointConsts.DisplayNameDisplay]"></DataGridColumn>
+                <DataGridColumn TItem="BillingEndpointDto"
+                                Field="@nameof(BillingEndpointDto.Endpoint)"
+                                Caption="@L[BillingEndpointConsts.EndpointDisplay]"></DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+<Modal @ref="@CreateModal">
+    <ModalContent Centered Size="ModalSize.Large">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@NL["New"] @BML["Endpoint"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <BillingEndpointWrapper @bind-Entity="NewEntity" />
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseCreateModalAsync">
+                    @NL["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="CreateEntityAsync">
+                    @NL["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="@EditModal">
+    <ModalContent Centered Size="ModalSize.Large">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@BML["Endpoint"] - @EditingEntity.DisplayName</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
+                    <BillingEndpointWrapper @bind-Entity="EditingEntity" />
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditModalAsync">
+                    @NL["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="UpdateEntityAsync">
+                    @NL["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Pages
+@code
+{
+    public BillingEndpointCrud() // Constructor
+    {
+        CreatePolicyName = NnMgmtBillingPermissions.PrmBillingEndpoint.Create;
+        UpdatePolicyName = NnMgmtBillingPermissions.PrmBillingEndpoint.Update;
+        DeletePolicyName = NnMgmtBillingPermissions.PrmBillingEndpoint.Delete;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OpenCreateModalAsync()
+    {
+        try
+        {
+            if (CreateValidationsRef != null)
+            {
+                await CreateValidationsRef.ClearAll();
+            }
+
+            await CheckCreatePolicyAsync();
+
+            NewEntity = new BillingEndpointDto();
+            NewEntity.IsActive = true;
+
+            // Mapper will not notify Blazor that binded values are changed
+            // so we need to notify it manually by calling StateHasChanged
+            await InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                if (CreateModal != null)
+                {
+                    await CreateModal.Show();
+                }
+
+            });
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+}

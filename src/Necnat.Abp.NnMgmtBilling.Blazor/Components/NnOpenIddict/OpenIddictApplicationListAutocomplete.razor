@@ -1,0 +1,71 @@
+﻿@using Blazorise.Components
+@using Microsoft.Extensions.Localization;
+@using Necnat.Abp.NnLibCommon.Blazor.Components
+@using Necnat.Abp.NnLibCommon.Blazor.Extensions
+@using Necnat.Abp.NnLibCommon.Localization
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using System.Collections.ObjectModel
+@using Volo.Abp.AspNetCore.Components
+@using Volo.Abp.Identity
+@inherits ListAutocompleteComponent<INnOpenIddictApplicationAppService, NnOpenIddictApplicationDto, Guid, NnOpenIddictApplicationResultRequestDto>
+@inject IStringLocalizer<NnLibCommonResource> NL
+@inject IStringLocalizer<NnMgmtBillingResource> BML
+
+<Fields>
+    <Field ColumnSize="ColumnSize.Is10">
+        <Autocomplete @ref="_autocomplete" TItem="NnOpenIddictApplicationDto"
+                      TValue="NnOpenIddictApplicationDto"
+                      Data="@_readData"
+                      ReadData="@OnHandleReadDataAsync"
+                      TextField="@((item) => $"[{item.ClientId}] {item.DisplayName}")"
+                      ValueField="@((item) => item)"
+                      @bind-SelectedValue="@_selectedValue"
+                      Placeholder="@(string.Format(NL["Enter at least {0} characters to start the search..."], SearchValueMinLength))"
+                      Disabled="@Disabled"
+                      Validator="Validator!"
+                      Filter="AutocompleteFilter.Contains">
+            <NotFoundContent>@string.Format(NL["Sorry... {0} was not found!"], context)</NotFoundContent>
+        </Autocomplete>
+    </Field>
+    <Field ColumnSize="ColumnSize.Is2">
+        <Button Class="w-100" Color="Color.Primary" Clicked="AddAsync" Disabled="@(_selectedValue == null)"><i class="fas fa-plus"></i></Button>
+    </Field>
+</Fields>
+
+<DataGrid TItem="NnOpenIddictApplicationDto"
+          Data="SelectedValueList"
+          ShowPager="true"
+          PageSize="PageSize">
+    <DataGridColumns>
+        <DataGridEntityActionsColumn TItem="NnOpenIddictApplicationDto">
+            <DisplayTemplate>
+                <EntityActions TItem="NnOpenIddictApplicationDto">
+                    <EntityAction TItem="NnOpenIddictApplicationDto"
+                                  Text="@L["Delete"]"
+                                  Clicked="async () => await RemoveAsync(context)" />
+                </EntityActions>
+            </DisplayTemplate>
+        </DataGridEntityActionsColumn>
+        <DataGridColumn TItem="NnOpenIddictApplicationDto"
+                        Field="@nameof(NnOpenIddictApplicationDto.ClientId)"
+                        Caption="@BML[OpenIddictApplicationConsts.UserNameDisplay]"></DataGridColumn>
+        <DataGridColumn TItem="NnOpenIddictApplicationDto"
+                        Field="@nameof(NnOpenIddictApplicationDto.DisplayName)"
+                        Caption="@BML[OpenIddictApplicationConsts.NameDisplay]"></DataGridColumn>
+    </DataGridColumns>
+</DataGrid>
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
+@code {
+
+    public OpenIddictApplicationListAutocomplete()
+    {
+        LocalizationResource = typeof(NnLibCommonResource);
+    }
+
+    public override NnOpenIddictApplicationResultRequestDto GetSearchInput(string searchValue)
+    {
+        return new NnOpenIddictApplicationResultRequestDto { MaxResultCount = 5, ClientIdOrDisplayNameContains = searchValue };
+    }
+}

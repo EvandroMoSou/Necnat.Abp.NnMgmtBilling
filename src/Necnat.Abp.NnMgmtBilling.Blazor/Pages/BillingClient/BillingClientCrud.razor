@@ -1,0 +1,365 @@
+﻿@page "/BillingManagement/Configuration/BillingClients"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using System.Collections.ObjectModel
+@using Necnat.Abp.NnLibCommon.Blazor.Components.NnIdentity
+@using Necnat.Abp.NnLibCommon.Localization
+@using Necnat.Abp.NnMgmtBilling.Blazor.Components
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using Necnat.Abp.NnMgmtBilling.Permissions
+@using Volo.Abp
+@using Volo.Abp.Application.Dtos
+@using Volo.Abp.AspNetCore.Components.Web
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.Identity
+@attribute [Authorize(NnMgmtBillingPermissions.PrmBillingClient.Default)]
+@inherits AbpCrudPageBase<IBillingClientAppService, BillingClientDto, Guid, BillingClientResultRequestDto>
+@inject IStringLocalizer<NnLibCommonResource> NL
+@inject IStringLocalizer<NnMgmtBillingResource> BML
+@inject IBillingClientAppService AppService
+
+<Card>
+    <CardHeader>
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <h2>@BML["Clients"]</h2>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsAuto">
+                @if (HasCreatePermission)
+                {
+                    <Button Color="Color.Primary"
+                            Clicked="OpenCreateModalAsync">
+                        @NL["New"]
+                    </Button>
+                }
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="BillingClientDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  CurrentPage="CurrentPage"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="BillingClientDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="BillingClientDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="BillingClientDto"
+                                          Text="@NL["Users"]"
+                                          Visible=HasUpdatePermission
+                                          Clicked="() => OpenUsersModalAsync(context)" />
+                            <EntityAction TItem="BillingClientDto"
+                                          Text="@("OIDC " + BML["Clients"])"
+                                          Visible=HasUpdatePermission
+                                          Clicked="() => OpenOidcClientModalAsync(context)" />
+                            <EntityAction TItem="BillingClientDto"
+                                          Text="@NL["Edit"]"
+                                          Visible=HasUpdatePermission
+                                          Clicked="() => OpenEditModalAsync(context)" />
+                            <EntityAction TItem="BillingClientDto"
+                                          Text="@NL["Delete"]"
+                                          Visible=HasDeletePermission
+                                          Clicked="() => DeleteEntityAsync(context)"
+                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+                <DataGridColumn TItem="BillingClientDto"
+                                Field="@nameof(BillingClientDto.Name)"
+                                Caption="@BML[BillingClientConsts.NameDisplay]"></DataGridColumn>
+                <DataGridCheckColumn TItem="BillingClientDto"
+                                Field="@nameof(BillingClientDto.IsActive)"
+                                Caption="@BML[BillingClientConsts.IsActiveDisplay]"></DataGridCheckColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+<Modal @ref="@CreateModal">
+    <ModalContent Centered Size="ModalSize.Large">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@NL["New"] @BML["Client"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="true">
+                    <BillingClientWrapper @bind-Entity="NewEntity" />
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseCreateModalAsync">
+                    @NL["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="CreateEntityAsync">
+                    @NL["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="@EditModal">
+    <ModalContent Centered Size="ModalSize.Large">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@BML["Client"] - @EditingEntity.Name</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="true">
+                    <BillingClientWrapper @bind-Entity="EditingEntity" />
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditModalAsync">
+                    @NL["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="UpdateEntityAsync">
+                    @NL["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="@_usersModal">
+    <ModalContent Centered Size="ModalSize.Large">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@BML["Client"] - @EditingEntity.Name</ModalTitle>
+                <CloseButton Clicked="CloseUsersModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <UserListAutocomplete @bind-SelectedValueList="_users" AddMethod="CreateUserAsync" RemoveMethod="DeleteUserAsync" />
+                <br />
+            </ModalBody>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="@_oidcClientModal">
+    <ModalContent Centered Size="ModalSize.Large">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@BML["Client"] - @EditingEntity.Name</ModalTitle>
+                <CloseButton Clicked="CloseOidcClientModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <OpenIddictApplicationListAutocomplete @bind-SelectedValueList="_oidcClients" AddMethod="CreateOpenIddictApplicationAsync" RemoveMethod="DeleteOpenIddictApplicationAsync" />
+                <br />
+            </ModalBody>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Pages
+@code
+{
+    public BillingClientCrud() // Constructor
+    {
+        CreatePolicyName = NnMgmtBillingPermissions.PrmBillingClient.Create;
+        UpdatePolicyName = NnMgmtBillingPermissions.PrmBillingClient.Update;
+        DeletePolicyName = NnMgmtBillingPermissions.PrmBillingClient.Delete;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OpenCreateModalAsync()
+    {
+        try
+        {
+            if (CreateValidationsRef != null)
+            {
+                await CreateValidationsRef.ClearAll();
+            }
+
+            await CheckCreatePolicyAsync();
+
+            NewEntity = new BillingClientDto();
+            NewEntity.IsActive = true;
+
+            // Mapper will not notify Blazor that binded values are changed
+            // so we need to notify it manually by calling StateHasChanged
+            await InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                if (CreateModal != null)
+                {
+                    await CreateModal.Show();
+                }
+
+            });
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    #region Users
+
+    protected Modal? _usersModal;
+    protected ObservableCollection<IdentityUserDto>? _users;
+
+    protected virtual async Task OpenUsersModalAsync(BillingClientDto entity)
+    {
+        try
+        {
+            await CheckUpdatePolicyAsync();
+
+            EditingEntityId = entity.Id;
+            EditingEntity = MapToEditingEntity(entity);
+            _users = new ObservableCollection<IdentityUserDto>(await AppService.GetUsersAsync(entity.Id));
+
+            // Mapper will not notify Blazor that binded values are changed
+            // so we need to notify it manually by calling StateHasChanged
+            await InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                if (_usersModal != null)
+                {
+                    await _usersModal.Show();
+                }
+
+            });
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    protected virtual Task CloseUsersModalAsync()
+    {
+        _users = new ObservableCollection<IdentityUserDto>();
+        return InvokeAsync(_usersModal!.Hide);
+    }
+
+    protected virtual Task ClosingUsersModal(ModalClosingEventArgs eventArgs)
+    {
+        // cancel close if clicked outside of modal area
+        eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+
+        return Task.CompletedTask;
+    }
+
+    protected virtual async Task<Guid> CreateUserAsync(IdentityUserDto dto)
+    {
+        try
+        {
+            var entity = await AppService.CreateUserAsync(EditingEntityId, dto.Id);
+            return dto.Id;
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+            return Guid.Empty;
+        }
+    }
+
+    protected virtual async Task DeleteUserAsync(Guid id)
+    {
+        try
+        {
+            await AppService.DeleteUserAsync(EditingEntityId, id);
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    #endregion
+
+    #region OidcClient
+
+    protected Modal? _oidcClientModal;
+    protected ObservableCollection<NnOpenIddictApplicationDto>? _oidcClients;
+
+    protected virtual async Task OpenOidcClientModalAsync(BillingClientDto entity)
+    {
+        try
+        {
+            await CheckUpdatePolicyAsync();
+
+            EditingEntityId = entity.Id;
+            EditingEntity = MapToEditingEntity(entity);
+            _oidcClients = new ObservableCollection<NnOpenIddictApplicationDto>(await AppService.GetOpenIddictApplicationsAsync(entity.Id));
+
+            // Mapper will not notify Blazor that binded values are changed
+            // so we need to notify it manually by calling StateHasChanged
+            await InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                if (_oidcClientModal != null)
+                {
+                    await _oidcClientModal.Show();
+                }
+
+            });
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    protected virtual Task CloseOidcClientModalAsync()
+    {
+        _oidcClients = new ObservableCollection<NnOpenIddictApplicationDto>();
+        return InvokeAsync(_oidcClientModal!.Hide);
+    }
+
+    protected virtual Task ClosingOidcClientModal(ModalClosingEventArgs eventArgs)
+    {
+        // cancel close if clicked outside of modal area
+        eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+
+        return Task.CompletedTask;
+    }
+
+    protected virtual async Task<Guid> CreateOpenIddictApplicationAsync(NnOpenIddictApplicationDto dto)
+    {
+        try
+        {
+            await AppService.CreateOpenIddictApplicationAsync(EditingEntityId, dto.Id);
+            return dto.Id;
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+            return Guid.Empty;
+        }
+    }
+
+    protected virtual async Task DeleteOpenIddictApplicationAsync(Guid id)
+    {
+        try
+        {
+            await AppService.DeleteOpenIddictApplicationAsync(EditingEntityId, id);
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    #endregion
+
+}

@@ -4,12 +4,12 @@
     "MyAccount": "My account",
     "SamplePageMessage": "A sample page for the NnMgmtBilling module",
 
-    "Menu:BillingManagement": "Billing",
-    "Menu:BillingManagement:Configuration": "Configuration",
-    "Menu:BillingManagement:Configuration:BillingClient": "Client",
-    "Menu:BillingManagement:Configuration:BillingEndpoint": "Endpoint",
-    "Menu:BillingManagement:Configuration:BillingContract": "Contract",
-    "Menu:BillingManagement:Configuration:Sku": "SKU",
-    "Menu:BillingManagement:Dashboard": "Dashboard"
+    "Menu:NnMgmtBilling": "Billing",
+    "Menu:NnMgmtBilling:Configuration": "Configuration",
+    "Menu:NnMgmtBilling:Configuration:BillingClient": "Client",
+    "Menu:NnMgmtBilling:Configuration:BillingEndpoint": "Endpoint",
+    "Menu:NnMgmtBilling:Configuration:BillingContract": "Contract",
+    "Menu:NnMgmtBilling:Configuration:Sku": "SKU",
+    "Menu:NnMgmtBilling:Dashboard": "Dashboard"
   }
 }
