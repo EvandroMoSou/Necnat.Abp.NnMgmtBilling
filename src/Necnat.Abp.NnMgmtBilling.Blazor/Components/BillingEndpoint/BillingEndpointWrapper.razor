@@ -24,7 +24,7 @@
     <Validation Validator="@ValidateIsActive">
         <Field ColumnSize="ColumnSize.Is2">
             <FieldLabel>@BML[BillingEndpointConsts.IsActiveDisplay]</FieldLabel>
-            <Check TValue="bool?" @bind-Text="@Entity!.IsActive">
+            <Check TValue="bool?" @bind-Checked="@Entity!.IsActive">
                 <Feedback>
                     <ValidationError />
                 </Feedback>

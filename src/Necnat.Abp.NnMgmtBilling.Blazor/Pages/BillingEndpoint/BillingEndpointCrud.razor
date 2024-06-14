@@ -27,10 +27,10 @@
             <Column ColumnSize="ColumnSize.IsAuto">
                 @if (HasCreatePermission)
                 {
-                    <Button Color="Color.Primary"
-                            Clicked="OpenCreateModalAsync">
+                        <Button Color="Color.Primary"
+                                Clicked="OpenCreateModalAsync">
                         @NL["New"]
-                    </Button>
+                        </Button>
                 }
             </Column>
         </Row>
@@ -61,10 +61,13 @@
                 </DataGridEntityActionsColumn>
                 <DataGridColumn TItem="BillingEndpointDto"
                                 Field="@nameof(BillingEndpointDto.DisplayName)"
-                                Caption="@L[BillingEndpointConsts.DisplayNameDisplay]"></DataGridColumn>
+                                Caption="@BML[BillingEndpointConsts.DisplayNameDisplay]"></DataGridColumn>
                 <DataGridColumn TItem="BillingEndpointDto"
                                 Field="@nameof(BillingEndpointDto.Endpoint)"
-                                Caption="@L[BillingEndpointConsts.EndpointDisplay]"></DataGridColumn>
+                                Caption="@BML[BillingEndpointConsts.EndpointDisplay]"></DataGridColumn>
+                 <DataGridCheckColumn TItem="BillingEndpointDto"
+                                Field="@nameof(BillingEndpointDto.IsActive)"
+                                Caption="@BML[BillingEndpointConsts.IsActiveDisplay]"></DataGridCheckColumn>
             </DataGridColumns>
         </DataGrid>
     </CardBody>
@@ -78,7 +81,7 @@
                 <CloseButton Clicked="CloseCreateModalAsync" />
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="true">
                     <BillingEndpointWrapper @bind-Entity="NewEntity" />
                 </Validations>
             </ModalBody>
