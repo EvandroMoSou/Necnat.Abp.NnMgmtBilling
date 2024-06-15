@@ -7,6 +7,7 @@
 @using Necnat.Abp.NnMgmtBilling.Localization
 @using System.Collections.ObjectModel
 @using Volo.Abp.AspNetCore.Components
+@using Volo.Abp.BlazoriseUI.Components
 @using Volo.Abp.Identity
 @inherits ListAutocompleteComponent<INnOpenIddictApplicationAppService, NnOpenIddictApplicationDto, Guid, NnOpenIddictApplicationResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
@@ -21,7 +22,7 @@
                       TextField="@((item) => $"[{item.ClientId}] {item.DisplayName}")"
                       ValueField="@((item) => item)"
                       @bind-SelectedValue="@_selectedValue"
-                      Placeholder="@(string.Format(NL["Enter at least {0} characters to start the search..."], SearchValueMinLength))"
+                      Placeholder="@(string.Format(NL["Enter at least {0} character(s) to start the search..."], SearchValueMinLength))"
                       Disabled="@Disabled"
                       Validator="Validator!"
                       Filter="AutocompleteFilter.Contains">
@@ -49,10 +50,10 @@
         </DataGridEntityActionsColumn>
         <DataGridColumn TItem="NnOpenIddictApplicationDto"
                         Field="@nameof(NnOpenIddictApplicationDto.ClientId)"
-                        Caption="@BML[OpenIddictApplicationConsts.UserNameDisplay]"></DataGridColumn>
+                        Caption="@BML[NnOpenIddictApplicationConsts.ClientIdDisplay]"></DataGridColumn>
         <DataGridColumn TItem="NnOpenIddictApplicationDto"
                         Field="@nameof(NnOpenIddictApplicationDto.DisplayName)"
-                        Caption="@BML[OpenIddictApplicationConsts.NameDisplay]"></DataGridColumn>
+                        Caption="@BML[NnOpenIddictApplicationConsts.DisplayNameDisplay]"></DataGridColumn>
     </DataGridColumns>
 </DataGrid>
 

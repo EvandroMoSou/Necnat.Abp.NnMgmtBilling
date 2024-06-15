@@ -37,7 +37,7 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
                 .Select(x => x.IdentityUserList).FirstOrDefaultAsync() ?? throw new EntityNotFoundException(typeof(BillingClient), id);
         }
 
-        public async Task<List<IdentityUser>> CreateUserAsync(Guid id, Guid userId, bool autosave = false)
+        public async Task<List<IdentityUser>> InsertUserAsync(Guid id, Guid userId, bool autosave = false)
         {
             var dbContext = await GetDbContextAsync();
             var user = await dbContext.BillingClient.Where(x => x.Id == id).Include(x => x.IdentityUserList).FirstOrDefaultAsync() ?? throw new EntityNotFoundException(typeof(BillingClient), id);
@@ -74,7 +74,7 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
                 .Select(x => x.OpenIddictApplicationList).FirstOrDefaultAsync() ?? throw new EntityNotFoundException(typeof(BillingClient), id);
         }
 
-        public async Task<List<OpenIddictApplication>> CreateOpenIddictApplicationAsync(Guid id, Guid openIddictApplicationId, bool autosave = false)
+        public async Task<List<OpenIddictApplication>> InsertOpenIddictApplicationAsync(Guid id, Guid openIddictApplicationId, bool autosave = false)
         {
             var dbContext = await GetDbContextAsync();
             var user = await dbContext.BillingClient.Where(x => x.Id == id).Include(x => x.OpenIddictApplicationList).FirstOrDefaultAsync() ?? throw new EntityNotFoundException(typeof(BillingClient), id);

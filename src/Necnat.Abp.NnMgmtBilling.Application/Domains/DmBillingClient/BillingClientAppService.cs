@@ -64,7 +64,7 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
         {
             await CheckUpdatePolicyAsync();
 
-            var lEntity = await Repository.CreateUserAsync(id, userId);
+            var lEntity = await Repository.InsertUserAsync(id, userId);
             return ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(lEntity);
         }
 
@@ -92,7 +92,7 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
         {
             await CheckUpdatePolicyAsync();
 
-            var lEntity = await Repository.CreateOpenIddictApplicationAsync(id, openIddictApplicationId);
+            var lEntity = await Repository.InsertOpenIddictApplicationAsync(id, openIddictApplicationId);
             return ObjectMapper.Map<List<OpenIddictApplication>, List<NnOpenIddictApplicationDto>>(lEntity);
         }
 
