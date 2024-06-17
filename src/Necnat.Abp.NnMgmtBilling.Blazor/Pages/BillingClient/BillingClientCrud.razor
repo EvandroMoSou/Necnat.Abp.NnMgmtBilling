@@ -263,8 +263,8 @@
     {
         try
         {
-            var entity = await AppService.CreateUserAsync(EditingEntityId, dto.Id);
-            return dto.Id;
+            await AppService.CreateUserAsync(EditingEntityId, dto.Id);
+            return entity.Id;
         }
         catch (Exception ex)
         {
@@ -338,8 +338,8 @@
     {
         try
         {
-            await AppService.CreateOpenIddictApplicationAsync(EditingEntityId, dto.Id);
-            return dto.Id;
+            var entity = await AppService.CreateOpenIddictApplicationAsync(EditingEntityId, dto.Id);
+            return entity.Id;
         }
         catch (Exception ex)
         {
