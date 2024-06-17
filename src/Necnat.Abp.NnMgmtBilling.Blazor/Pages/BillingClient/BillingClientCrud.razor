@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Localization
 @using System.Collections.ObjectModel
 @using Necnat.Abp.NnLibCommon.Blazor.Components.NnIdentity
+@using Necnat.Abp.NnLibCommon.Blazor.Helpers
 @using Necnat.Abp.NnLibCommon.Localization
 @using Necnat.Abp.NnMgmtBilling.Blazor.Components
 @using Necnat.Abp.NnMgmtBilling.Domains
@@ -259,17 +260,16 @@
         return Task.CompletedTask;
     }
 
-    protected virtual async Task<Guid> CreateUserAsync(IdentityUserDto dto)
+    protected virtual async Task CreateUserAsync(EventCallbackReturnParameter<IdentityUserDto, Guid> callbackParameter)
     {
         try
         {
-            await AppService.CreateUserAsync(EditingEntityId, dto.Id);
-            return entity.Id;
+            await AppService.CreateUserAsync(EditingEntityId, callbackParameter.Value!.Id);
+            callbackParameter.OutputValue = callbackParameter.Value.Id;
         }
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
-            return Guid.Empty;
         }
     }
 
@@ -334,17 +334,16 @@
         return Task.CompletedTask;
     }
 
-    protected virtual async Task<Guid> CreateOpenIddictApplicationAsync(NnOpenIddictApplicationDto dto)
+    protected virtual async Task CreateOpenIddictApplicationAsync(EventCallbackReturnParameter<NnOpenIddictApplicationDto, Guid> callbackParameter)
     {
         try
         {
-            var entity = await AppService.CreateOpenIddictApplicationAsync(EditingEntityId, dto.Id);
-            return entity.Id;
+            var entity = await AppService.CreateOpenIddictApplicationAsync(EditingEntityId, callbackParameter.Value!.Id);
+            callbackParameter.OutputValue = callbackParameter.Value.Id;
         }
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
-            return Guid.Empty;
         }
     }
 
