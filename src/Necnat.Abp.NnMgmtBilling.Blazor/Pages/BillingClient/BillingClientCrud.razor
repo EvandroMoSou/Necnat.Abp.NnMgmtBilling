@@ -260,16 +260,17 @@
         return Task.CompletedTask;
     }
 
-    protected virtual async Task CreateUserAsync(EventCallbackReturnParameter<IdentityUserDto, Guid> callbackParameter)
+    protected virtual async Task<Guid> CreateUserAsync(IdentityUserDto dto)
     {
         try
         {
-            await AppService.CreateUserAsync(EditingEntityId, callbackParameter.Value!.Id);
-            callbackParameter.OutputValue = callbackParameter.Value.Id;
+            await AppService.CreateUserAsync(EditingEntityId, dto.Id);
+            return dto.Id;
         }
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
+            return Guid.Empty;
         }
     }
 
@@ -334,16 +335,17 @@
         return Task.CompletedTask;
     }
 
-    protected virtual async Task CreateOpenIddictApplicationAsync(EventCallbackReturnParameter<NnOpenIddictApplicationDto, Guid> callbackParameter)
+    protected virtual async Task<Guid> CreateOpenIddictApplicationAsync(NnOpenIddictApplicationDto dto)
     {
         try
         {
-            var entity = await AppService.CreateOpenIddictApplicationAsync(EditingEntityId, callbackParameter.Value!.Id);
-            callbackParameter.OutputValue = callbackParameter.Value.Id;
+            var entity = await AppService.CreateOpenIddictApplicationAsync(EditingEntityId, dto.Id);
+            return dto.Id;
         }
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
+            return Guid.Empty;
         }
     }
 
