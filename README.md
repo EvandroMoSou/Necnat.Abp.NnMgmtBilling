@@ -23,3 +23,17 @@ On HttpApiHostModule Add:
 
 options.ConventionalControllers.Create(typeof(NnLibCommonApplicationModule).Assembly);
 options.ConventionalControllers.Create(typeof(NnMgmtBillingApplicationModule).Assembly);
+
+On EntityFrameworkCoreModule:
+
+        Configure<AbpDbContextOptions>(options =>
+        {
+            /* The main point to change your DBMS.
+             * See also NnTesteMigrationsDbContextFactory for EF Core tooling. */
+
+            options.Configure(configureOptions =>
+            {
+                configureOptions.UseSqlServer();
+                configureOptions.DbContextOptions.ConfigureBillingManagement();
+            });
+        });
