@@ -27,7 +27,7 @@ public class NnMgmtBillingMenuContributor : IMenuContributor
         );
 
         bool displayBillingConfiguracaoMenu = false;
-        var BillingConfiguracaoMenu = new ApplicationMenuItem(
+        var billingConfiguracaoMenu = new ApplicationMenuItem(
             NnMgmtBillingMenus.Configuration,
             l["Menu:NnMgmtBilling:Configuration"],
             order: 1
@@ -35,7 +35,7 @@ public class NnMgmtBillingMenuContributor : IMenuContributor
 
         if (await context.IsGrantedAsync(NnMgmtBillingPermissions.PrmBillingEndpoint.Default))
         {
-            BillingConfiguracaoMenu.AddItem(new ApplicationMenuItem(
+            billingConfiguracaoMenu.AddItem(new ApplicationMenuItem(
                 NnMgmtBillingMenus.Configuration_BillingEndpoint,
                 l["Menu:NnMgmtBilling:Configuration:BillingEndpoint"],
                 url: "/NnMgmtBilling/Configuration/BillingEndpoints",
@@ -46,7 +46,7 @@ public class NnMgmtBillingMenuContributor : IMenuContributor
 
         if (await context.IsGrantedAsync(NnMgmtBillingPermissions.PrmBillingClient.Default))
         {
-            BillingConfiguracaoMenu.AddItem(new ApplicationMenuItem(
+            billingConfiguracaoMenu.AddItem(new ApplicationMenuItem(
                 NnMgmtBillingMenus.Configuration_BillingClient,
                 l["Menu:NnMgmtBilling:Configuration:BillingClient"],
                 url: "/NnMgmtBilling/Configuration/BillingClients",
@@ -57,7 +57,7 @@ public class NnMgmtBillingMenuContributor : IMenuContributor
 
         if (await context.IsGrantedAsync(NnMgmtBillingPermissions.PrmBillingContract.Default))
         {
-            BillingConfiguracaoMenu.AddItem(new ApplicationMenuItem(
+            billingConfiguracaoMenu.AddItem(new ApplicationMenuItem(
                 NnMgmtBillingMenus.Configuration_BillingContract,
                 l["Menu:NnMgmtBilling:Configuration:BillingContract"],
                 url: "/NnMgmtBilling/Configuration/BillingContracts",
@@ -68,7 +68,7 @@ public class NnMgmtBillingMenuContributor : IMenuContributor
 
         if (await context.IsGrantedAsync(NnMgmtBillingPermissions.PrmSku.Default))
         {
-            BillingConfiguracaoMenu.AddItem(new ApplicationMenuItem(
+            billingConfiguracaoMenu.AddItem(new ApplicationMenuItem(
                 NnMgmtBillingMenus.Configuration_Sku,
                 l["Menu:NnMgmtBilling:Configuration:Sku"],
                 url: "/NnMgmtBilling/Configuration/Skus",
@@ -78,7 +78,7 @@ public class NnMgmtBillingMenuContributor : IMenuContributor
         }
 
         if (displayBillingConfiguracaoMenu)
-            billingMenu.AddItem(BillingConfiguracaoMenu);
+            billingMenu.AddItem(billingConfiguracaoMenu);
 
         if (await context.IsGrantedAsync(NnMgmtBillingPermissions.PrmBillingEndpoint.CallEndpoint))
         {
