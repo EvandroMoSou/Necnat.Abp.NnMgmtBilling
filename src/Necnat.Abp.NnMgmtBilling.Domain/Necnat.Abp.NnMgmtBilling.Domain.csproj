@@ -30,7 +30,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
     <PackageReference Include="Necnat.Abp.NnLibCommon.Domain">
-      <Version>0.1.1</Version>
+      <Version>0.1.7</Version>
     </PackageReference>
     <PackageReference Include="Volo.Abp.Identity.Domain">
       <Version>8.1.4</Version>
