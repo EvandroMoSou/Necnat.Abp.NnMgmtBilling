@@ -7,7 +7,7 @@ namespace Necnat.Abp.NnMgmtBilling.EntityFrameworkCore
 {
     public static class NnMgmtBillingDbContextOptionsBuilderExtensions
     {
-        public static void ConfigureBillingManagement(
+        public static void ConfigureNnMgmtBilling(
             this DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseTriggers(triggerOptions =>
