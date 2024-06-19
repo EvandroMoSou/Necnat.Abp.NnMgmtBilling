@@ -64,8 +64,8 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
             if (entityTemporal == null)
                 throw new EntityNotFoundException(typeof(Sku), id);
 
-            entityTemporal.SkuPriceRangeList = await _skuPriceRangeTemporalRepository.GetListEntityBySkuIdAsync(time.DateTime, id);
-            entityTemporal.SkuScopeList = await _skuScopeTemporalRepository.GetListEntityBySkuIdAsync(time.DateTime, id);
+            entityTemporal.SkuPriceRangeList = await _skuPriceRangeTemporalRepository.GetListBySkuIdAsync(time.DateTime, id);
+            entityTemporal.SkuScopeList = await _skuScopeTemporalRepository.GetListBySkuIdAsync(time.DateTime, id);
 
             return await MapToGetOutputDtoAsync(entityTemporal);
         }

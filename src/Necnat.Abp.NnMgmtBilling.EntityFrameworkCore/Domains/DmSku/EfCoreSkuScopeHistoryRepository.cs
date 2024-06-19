@@ -18,10 +18,10 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
 
         }
 
-        public async Task<List<SkuScope>> GetListEntityBySkuIdAsync(DateTime period, Guid skuId)
+        public async Task<List<SkuScope>> GetListBySkuIdAsync(DateTime period, Guid skuId)
         {
             var dbSet = await GetDbSetAsync();
-            var temporalList = await dbSet.Where(x => x.SkuId == skuId && x.PeriodStart >= period && (x.PeriodEnd == null || x.PeriodEnd < period)).ToListAsync();
+            var temporalList = await dbSet.Where(x => x.SkuId == skuId && x.PeriodStart <= period && (x.PeriodEnd == null || x.PeriodEnd > period)).ToListAsync();
             return MapToEntity(temporalList);
         }
     }

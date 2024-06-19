@@ -7,6 +7,6 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
 {
     public interface ISkuPriceRangeTemporalRepository : ITemporalRepository<SkuPriceRangeTemporal, Guid, SkuPriceRange>
     {
-        Task<List<SkuPriceRange>> GetListEntityBySkuIdAsync(DateTime changeTimeDesc, Guid skuId);
+        Task<List<SkuPriceRange>> GetListBySkuIdAsync(DateTime changeTimeDesc, Guid skuId);
     }
 }
