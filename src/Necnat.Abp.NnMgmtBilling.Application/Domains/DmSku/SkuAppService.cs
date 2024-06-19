@@ -62,8 +62,8 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
             if (entityHistory == null)
                 throw new EntityNotFoundException(typeof(Sku), id);
 
-            entityHistory.SkuPriceRangeList = await _skuPriceRangeHistoryRepository.GetListEntityAsync(time.DateTime, entityHistory.SkuPriceRangeList.Select(x => x.Id).ToList());
-            entityHistory.SkuScopeList = await _skuScopeHistoryRepository.GetListEntityAsync(time.DateTime, entityHistory.SkuScopeList.Select(x => x.Id).ToList());
+            entityHistory.SkuPriceRangeList = await _skuPriceRangeHistoryRepository.GetListEntityBySkuIdAsync(time.DateTime, id);
+            entityHistory.SkuScopeList = await _skuScopeHistoryRepository.GetListEntityBySkuIdAsync(time.DateTime, id);
 
             return await MapToGetOutputDtoAsync(entityHistory);
         }
