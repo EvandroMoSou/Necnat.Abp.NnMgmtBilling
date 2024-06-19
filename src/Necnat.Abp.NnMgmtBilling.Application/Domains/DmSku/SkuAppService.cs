@@ -54,16 +54,16 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
             return q;
         }
 
-        public async Task<SkuDto> GetHistoryDetailedAsync(DateTime time, Guid id)
+        public async Task<SkuDto> GetHistoryDetailedAsync(DateTimeOffset time, Guid id)
         {
             await CheckGetPolicyAsync();
 
-            var entityHistory = await _skuHistoryRepository.FindEntityAsync(time, id);
+            var entityHistory = await _skuHistoryRepository.FindEntityAsync(time.DateTime, id);
             if (entityHistory == null)
                 throw new EntityNotFoundException(typeof(Sku), id);
 
-            entityHistory.SkuPriceRangeList = await _skuPriceRangeHistoryRepository.GetListEntityAsync(time, entityHistory.SkuPriceRangeList.Select(x => x.Id).ToList());
-            entityHistory.SkuScopeList = await _skuScopeHistoryRepository.GetListEntityAsync(time, entityHistory.SkuScopeList.Select(x => x.Id).ToList());
+            entityHistory.SkuPriceRangeList = await _skuPriceRangeHistoryRepository.GetListEntityAsync(time.DateTime, entityHistory.SkuPriceRangeList.Select(x => x.Id).ToList());
+            entityHistory.SkuScopeList = await _skuScopeHistoryRepository.GetListEntityAsync(time.DateTime, entityHistory.SkuScopeList.Select(x => x.Id).ToList());
 
             return await MapToGetOutputDtoAsync(entityHistory);
         }

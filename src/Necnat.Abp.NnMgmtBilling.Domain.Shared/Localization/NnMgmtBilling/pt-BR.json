@@ -18,12 +18,11 @@
     "Display Name": "Nome de Exibição",
     "Client": "Cliente",
     "Clients": "Clientes",
+    "Code": "Código",
+    "Contracts": "Contratos",
+    "Contract": "Contrato",
     "HTTP Method": "Método HTTP",
     "Name": "Nome",
-
-
-
-
 
     "There cannot be an api scope without an http method and another with an http method for the same url.": "Não pode haver um escopo de api sem um método http e outro com um método http para a mesma url.",
     "There cannot be an application scope and an api scope of that application with the same value for the field Billable.": "Não pode haver um escopo de aplicação e um escopo de api dessa aplicação com o mesmo valor para o campo Faturável."
