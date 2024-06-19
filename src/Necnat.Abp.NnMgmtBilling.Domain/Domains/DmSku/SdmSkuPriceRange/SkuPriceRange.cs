@@ -1,5 +1,6 @@
 ﻿using Necnat.Abp.NnLibCommon.Entities;
 using System;
+using System.Text.Json.Serialization;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
@@ -8,8 +9,10 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
     {
         public new Guid Id { get; set; }
         public Guid SkuId { get; set; }
-        public Sku Sku { get; set; } = null!;
         public int? UpToRequestCount { get; set; }
         public decimal Price { get; set; }
+
+        [JsonIgnore]
+        public Sku Sku { get; set; } = null!;
     }
 }
