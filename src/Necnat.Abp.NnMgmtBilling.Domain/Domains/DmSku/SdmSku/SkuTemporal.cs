@@ -1,23 +1,18 @@
 ﻿using Necnat.Abp.NnLibCommon.Entities;
-using Necnat.Abp.NnLibCommon.Enums;
 using System;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
-    public class SkuScopeHistory : Entity<Guid>, IEntityHistory<Guid>, IHasExtraProperties
+    public class SkuTemporal : Entity<Guid>, IEntityTemporal<Guid>, IHasExtraProperties
     {
-        public virtual Guid BaseId { get; set; }
-        public virtual int ChangeType { get; set; }
-        public virtual DateTime ChangeTime { get; set; }
+        public DateTime PeriodStart { get; set; }
+        public DateTime? PeriodEnd { get; set; }
 
-        public Guid? SkuId { get; set; }
-        public string? ApplicationName { get; set; } = string.Empty;
-        public HttpRequestMethod? HttpMethod { get; set; }
-        public string? Url { get; set; }
-        public bool? IsBillable { get; set; }
-        public bool? IsActive { get; set; }
+        public new Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public bool IsActive { get; set; }
 
         public virtual ExtraPropertyDictionary ExtraProperties { get; set; } = new ExtraPropertyDictionary();
         public virtual string? ConcurrencyStamp { get; set; }

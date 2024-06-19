@@ -33,12 +33,12 @@ public interface INnMgmtBillingDbContext : IEfCoreDbContext
     //BillingManagement
     DbSet<BillingClient> BillingClient { get; }
     DbSet<BillingContract> BillingContract { get; }
-    DbSet<BillingContractHistory> BillingContractHistory { get; }
+    DbSet<BillingContractTemporal> BillingContractTemporal { get; }
     DbSet<BillingEndpoint> BillingEndpoint { get; }
     DbSet<Sku> Sku { get; }
-    DbSet<SkuHistory> SkuHistory { get; }
+    DbSet<SkuTemporal> SkuTemporal { get; }
     DbSet<SkuPriceRange> SkuPriceRange { get; }
-    DbSet<SkuPriceRangeHistory> SkuPriceRangeHistory { get; }
+    DbSet<SkuPriceRangeTemporal> SkuPriceRangeTemporal { get; }
     DbSet<SkuScope> SkuScope { get; }
-    DbSet<SkuScopeHistory> SkuScopeHistory { get; }
+    DbSet<SkuScopeTemporal> SkuScopeTemporal { get; }
 }

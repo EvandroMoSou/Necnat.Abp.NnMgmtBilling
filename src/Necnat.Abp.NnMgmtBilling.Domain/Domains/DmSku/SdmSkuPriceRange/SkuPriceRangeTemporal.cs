@@ -5,14 +5,15 @@ using Volo.Abp.Domain.Entities;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
-    public class SkuHistory : Entity<Guid>, IEntityHistory<Guid>, IHasExtraProperties
+    public class SkuPriceRangeTemporal : Entity<Guid>, IEntityTemporal<Guid>, IHasExtraProperties
     {
-        public virtual Guid BaseId { get; set; }
-        public virtual int ChangeType { get; set; }
-        public virtual DateTime ChangeTime { get; set; }
+        public DateTime PeriodStart { get; set; }
+        public DateTime? PeriodEnd { get; set; }
 
-        public string? Name { get; set; } = string.Empty;
-        public bool? IsActive { get; set; }
+        public new Guid Id { get; set; }
+        public Guid SkuId { get; set; }
+        public int? UpToRequestCount { get; set; }
+        public decimal Price { get; set; }
 
         public virtual ExtraPropertyDictionary ExtraProperties { get; set; } = new ExtraPropertyDictionary();
         public virtual string? ConcurrencyStamp { get; set; }

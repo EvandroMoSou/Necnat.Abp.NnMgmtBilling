@@ -1,22 +1,23 @@
-﻿using Necnat.Abp.NnLibCommon.Entities;
-using System;
+﻿using System;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Necnat.Abp.NnLibCommon.Entities;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
-    public class BillingContractHistory : Entity<Guid>, IEntityHistory<Guid>, IHasExtraProperties
+    public class BillingContractTemporal : Entity<Guid>, IEntityTemporal<Guid>, IHasExtraProperties
     {
-        public virtual Guid BaseId { get; set; }
-        public virtual int ChangeType { get; set; }
-        public virtual DateTime ChangeTime { get; set; }
+        public DateTime PeriodStart { get; set; }
+        public DateTime? PeriodEnd { get; set; }
 
-        public Guid? BillingClientId { get; set; }
-        public string? Code { get; set; } = string.Empty;
-        public DateTime? EffectiveTime { get; set; }
+        public new Guid Id { get; set; }
+        public Guid BillingClientId { get; set; }
+        public string Code { get; set; } = string.Empty;
+        public DateTime SkuReferenceTime { get; set; }
+        public DateTime EffectiveTime { get; set; }
         public Guid? AcceptanceUserId { get; set; }
         public DateTime? AcceptanceTime { get; set; }
-        public bool? IsActive { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual ExtraPropertyDictionary ExtraProperties { get; set; } = new ExtraPropertyDictionary();
         public virtual string? ConcurrencyStamp { get; set; }

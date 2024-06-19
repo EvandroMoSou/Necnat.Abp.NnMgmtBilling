@@ -34,14 +34,14 @@ public class NnMgmtBillingDbContext : AbpDbContext<NnMgmtBillingDbContext>, INnM
 
     public DbSet<BillingClient> BillingClient { get; set; }
     public DbSet<BillingContract> BillingContract { get; set; }
-    public DbSet<BillingContractHistory> BillingContractHistory { get; set; }
+    public DbSet<BillingContractTemporal> BillingContractTemporal { get; set; }
     public DbSet<BillingEndpoint> BillingEndpoint { get; set; }
     public DbSet<Sku> Sku { get; set; }
-    public DbSet<SkuHistory> SkuHistory { get; set; }
+    public DbSet<SkuTemporal> SkuTemporal { get; set; }
     public DbSet<SkuPriceRange> SkuPriceRange { get; set; }
-    public DbSet<SkuPriceRangeHistory> SkuPriceRangeHistory { get; set; }
+    public DbSet<SkuPriceRangeTemporal> SkuPriceRangeTemporal { get; set; }
     public DbSet<SkuScope> SkuScope { get; set; }
-    public DbSet<SkuScopeHistory> SkuScopeHistory { get; set; }
+    public DbSet<SkuScopeTemporal> SkuScopeTemporal { get; set; }
 
     public NnMgmtBillingDbContext(DbContextOptions<NnMgmtBillingDbContext> options)
         : base(options)

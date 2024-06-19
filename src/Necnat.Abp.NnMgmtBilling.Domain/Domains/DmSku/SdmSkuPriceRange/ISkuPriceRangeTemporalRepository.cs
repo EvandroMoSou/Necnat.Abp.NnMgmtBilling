@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
-    public interface ISkuPriceRangeHistoryRepository : IHistoryRepository<SkuPriceRangeHistory, Guid, SkuPriceRange>
+    public interface ISkuPriceRangeTemporalRepository : ITemporalRepository<SkuPriceRangeTemporal, Guid, SkuPriceRange>
     {
         Task<List<SkuPriceRange>> GetListEntityBySkuIdAsync(DateTime changeTimeDesc, Guid skuId);
     }

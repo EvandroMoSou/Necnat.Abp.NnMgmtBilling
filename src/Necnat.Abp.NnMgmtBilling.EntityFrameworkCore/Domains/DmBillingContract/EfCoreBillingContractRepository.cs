@@ -12,19 +12,11 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
 {
     public class EfCoreBillingContractRepository : EfCoreRepository<NnMgmtBillingDbContext, BillingContract, Guid>, IBillingContractRepository
     {
-        protected readonly ISkuHistoryRepository _skuHistoryRepository;
-        protected readonly ISkuPriceRangeHistoryRepository _skuPriceRangeHistoryRepository;
-        protected readonly ISkuScopeHistoryRepository _skuScopeHistoryRepository;
 
         public EfCoreBillingContractRepository(
-            IDbContextProvider<NnMgmtBillingDbContext> dbContextProvider,
-            ISkuHistoryRepository skuHistoryRepository,
-            ISkuPriceRangeHistoryRepository skuPriceRangeHistoryRepository,
-            ISkuScopeHistoryRepository skuScopeHistoryRepository) : base(dbContextProvider)
+            IDbContextProvider<NnMgmtBillingDbContext> dbContextProvider) : base(dbContextProvider)
         {
-            _skuHistoryRepository = skuHistoryRepository;
-            _skuPriceRangeHistoryRepository = skuPriceRangeHistoryRepository;
-            _skuScopeHistoryRepository = skuScopeHistoryRepository;
+
         }
 
         #region Sku

@@ -11,31 +11,18 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
-    public class EfCoreSkuScopeHistoryRepository : EfCoreHistoryRepository<NnMgmtBillingDbContext, SkuScopeHistory, Guid, SkuScope>, ISkuScopeHistoryRepository
+    public class EfCoreSkuScopeTemporalRepository : EfCoreTemporalRepository<NnMgmtBillingDbContext, SkuScopeTemporal, Guid, SkuScope>, ISkuScopeTemporalRepository
     {
-        public EfCoreSkuScopeHistoryRepository(IDbContextProvider<NnMgmtBillingDbContext> dbContextProvider) : base(dbContextProvider)
+        public EfCoreSkuScopeTemporalRepository(IDbContextProvider<NnMgmtBillingDbContext> dbContextProvider) : base(dbContextProvider)
         {
 
         }
 
-        public async Task<List<SkuScope>> GetListEntityBySkuIdAsync(DateTime changeTimeDesc, Guid skuId)
+        public async Task<List<SkuScope>> GetListEntityBySkuIdAsync(DateTime period, Guid skuId)
         {
             var dbSet = await GetDbSetAsync();
-            var historyList = await dbSet.Where(x => x.SkuId == skuId && x.ChangeTime <= changeTimeDesc).OrderByDescending(x => x.ChangeTime).ToListAsync();
-
-            var list = new List<SkuScope>();
-            foreach (var history in historyList)
-            {
-                if (history == null || history.ChangeType == (int)ChangeType.Deleted)
-                    continue;
-
-                var entity = JsonUtil.CloneTo<SkuScopeHistory, SkuScope>(history);
-                entity.Id = history.BaseId;
-                list.Add(entity);
-            }
-
-            return MapToEntity(historyList);
+            var temporalList = await dbSet.Where(x => x.SkuId == skuId && x.PeriodStart >= period && (x.PeriodEnd == null || x.PeriodEnd < period)).ToListAsync();
+            return MapToEntity(temporalList);
         }
-
     }
 }

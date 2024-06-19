@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Localization;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Necnat.Abp.NnLibCommon.Localization;
 using Necnat.Abp.NnLibCommon.Services;
 using Necnat.Abp.NnMgmtBilling.Permissions;
@@ -11,25 +12,25 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
 {
     public class SkuAppService : NecnatAppService<Sku, SkuDto, Guid, SkuResultRequestDto, ISkuRepository>, ISkuAppService
     {
-        protected readonly ISkuHistoryRepository _skuHistoryRepository;
-        protected readonly ISkuPriceRangeHistoryRepository _skuPriceRangeHistoryRepository;
+        protected readonly ISkuTemporalRepository _skuTemporalRepository;
+        protected readonly ISkuPriceRangeTemporalRepository _skuPriceRangeTemporalRepository;
         protected readonly ISkuPriceRangeRepository _skuPriceRangeRepository;
-        protected readonly ISkuScopeHistoryRepository _skuScopeHistoryRepository;
+        protected readonly ISkuScopeTemporalRepository _skuScopeTemporalRepository;
         protected readonly ISkuScopeRepository _skuScopeRepository;
 
         public SkuAppService(
             IStringLocalizer<NnLibCommonResource> necnatLocalizer,
             ISkuRepository repository,
-            ISkuHistoryRepository skuHistoryRepository,
-            ISkuPriceRangeHistoryRepository skuPriceRangeHistoryRepository,
+            ISkuTemporalRepository skuTemporalRepository,
+            ISkuPriceRangeTemporalRepository skuPriceRangeTemporalRepository,
             ISkuPriceRangeRepository skuPriceRangeRepository,
-            ISkuScopeHistoryRepository skuScopeHistoryRepository,
+            ISkuScopeTemporalRepository skuScopeTemporalRepository,
             ISkuScopeRepository skuScopeRepository) : base(necnatLocalizer, repository)
         {
-            _skuHistoryRepository = skuHistoryRepository;
-            _skuPriceRangeHistoryRepository = skuPriceRangeHistoryRepository;
+            _skuTemporalRepository = skuTemporalRepository;
+            _skuPriceRangeTemporalRepository = skuPriceRangeTemporalRepository;
             _skuPriceRangeRepository = skuPriceRangeRepository;
-            _skuScopeHistoryRepository = skuScopeHistoryRepository;
+            _skuScopeTemporalRepository = skuScopeTemporalRepository;
             _skuScopeRepository = skuScopeRepository;
 
             GetPolicyName = NnMgmtBillingPermissions.PrmSku.Default;
@@ -54,18 +55,19 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
             return q;
         }
 
-        public async Task<SkuDto> GetHistoryDetailedAsync(DateTimeOffset time, Guid id)
+        [HttpPost]
+        public async Task<SkuDto> GetTemporalDetailedAsync(DateTimeOffset time, Guid id)
         {
             await CheckGetPolicyAsync();
 
-            var entityHistory = await _skuHistoryRepository.FindEntityAsync(time.DateTime, id);
-            if (entityHistory == null)
+            var entityTemporal = await _skuTemporalRepository.FindByIdAsync(time.DateTime, id);
+            if (entityTemporal == null)
                 throw new EntityNotFoundException(typeof(Sku), id);
 
-            entityHistory.SkuPriceRangeList = await _skuPriceRangeHistoryRepository.GetListEntityBySkuIdAsync(time.DateTime, id);
-            entityHistory.SkuScopeList = await _skuScopeHistoryRepository.GetListEntityBySkuIdAsync(time.DateTime, id);
+            entityTemporal.SkuPriceRangeList = await _skuPriceRangeTemporalRepository.GetListEntityBySkuIdAsync(time.DateTime, id);
+            entityTemporal.SkuScopeList = await _skuScopeTemporalRepository.GetListEntityBySkuIdAsync(time.DateTime, id);
 
-            return await MapToGetOutputDtoAsync(entityHistory);
+            return await MapToGetOutputDtoAsync(entityTemporal);
         }
 
         protected override Task<SkuDto> CheckCreateInputAsync(SkuDto input)

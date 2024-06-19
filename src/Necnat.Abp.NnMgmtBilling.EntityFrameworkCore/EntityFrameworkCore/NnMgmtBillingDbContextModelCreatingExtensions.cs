@@ -3,6 +3,7 @@ using Necnat.Abp.NnMgmtBilling.Domains;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using static Dapper.SqlMapper;
 
 namespace Necnat.Abp.NnMgmtBilling.EntityFrameworkCore;
 
@@ -47,7 +48,7 @@ public static class NnMgmtBillingDbContextModelCreatingExtensions
 
         builder.Entity<BillingContract>(b =>
         {
-            b.UseTpcMappingStrategy().ToTable(NnMgmtBillingDbProperties.DbTablePrefix + "BillingContract",
+            b.ToTable(NnMgmtBillingDbProperties.DbTablePrefix + "BillingContract",
                 NnMgmtBillingDbProperties.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.Property(x => x.Code).IsRequired().HasMaxLength(BillingContractConsts.MaxCodeLength);
@@ -61,15 +62,16 @@ public static class NnMgmtBillingDbContextModelCreatingExtensions
             b.HasIndex(u => u.Code).IsUnique();
         });
 
-        builder.Entity<BillingContractHistory>(b =>
+        builder.Entity<BillingContractTemporal>(b =>
         {
-            b.ToTable(NnMgmtBillingDbProperties.DbTablePrefix + "BillingContractHistory",
+            b.ToTable(NnMgmtBillingDbProperties.DbTablePrefix + "BillingContractTemporal",
                 NnMgmtBillingDbProperties.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
+            b.HasKey(k => new { k.Id, k.PeriodStart });
             b.Property(x => x.Code).HasMaxLength(BillingContractConsts.MaxCodeLength);
             b.Property(x => x.ConcurrencyStamp).HasMaxLength(ConcurrencyStampConsts.MaxLength);
 
-            b.HasIndex(u => new { u.BaseId, u.ChangeTime });
+            b.HasIndex(u => new { u.Id });
         });
 
         builder.Entity<BillingEndpoint>(b =>
@@ -91,15 +93,16 @@ public static class NnMgmtBillingDbContextModelCreatingExtensions
             b.Property(x => x.IsActive).IsRequired();
         });
 
-        builder.Entity<SkuHistory>(b =>
+        builder.Entity<SkuTemporal>(b =>
         {
-            b.ToTable(NnMgmtBillingDbProperties.DbTablePrefix + "SkuHistory",
+            b.ToTable(NnMgmtBillingDbProperties.DbTablePrefix + "SkuTemporal",
                 NnMgmtBillingDbProperties.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
+            b.HasKey(k => new { k.Id, k.PeriodStart });
             b.Property(x => x.Name).HasMaxLength(SkuConsts.MaxNameLength);
             b.Property(x => x.ConcurrencyStamp).HasMaxLength(ConcurrencyStampConsts.MaxLength);
 
-            b.HasIndex(u => new { u.BaseId, u.ChangeTime });
+            b.HasIndex(u => new { u.Id });
         });
 
         builder.Entity<SkuPriceRange>(b =>
@@ -112,15 +115,16 @@ public static class NnMgmtBillingDbContextModelCreatingExtensions
             b.HasOne(o => o.Sku).WithMany(x => x.SkuPriceRangeList).HasForeignKey(x => x.SkuId).OnDelete(DeleteBehavior.Cascade);
         });
 
-        builder.Entity<SkuPriceRangeHistory>(b =>
+        builder.Entity<SkuPriceRangeTemporal>(b =>
         {
-            b.ToTable(NnMgmtBillingDbProperties.DbTablePrefix + "SkuPriceRangeHistory",
+            b.ToTable(NnMgmtBillingDbProperties.DbTablePrefix + "SkuPriceRangeTemporal",
                 NnMgmtBillingDbProperties.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
+            b.HasKey(k => new { k.Id, k.PeriodStart });
             b.Property(x => x.Price).HasPrecision(12, 8);
             b.Property(x => x.ConcurrencyStamp).HasMaxLength(ConcurrencyStampConsts.MaxLength);
 
-            b.HasIndex(u => new { u.BaseId, u.ChangeTime });
+            b.HasIndex(u => new { u.Id });
         });
 
         builder.Entity<SkuScope>(b =>
@@ -135,16 +139,17 @@ public static class NnMgmtBillingDbContextModelCreatingExtensions
             b.HasOne(o => o.Sku).WithMany(x => x.SkuScopeList).HasForeignKey(x => x.SkuId).OnDelete(DeleteBehavior.Cascade);
         });
 
-        builder.Entity<SkuScopeHistory>(b =>
+        builder.Entity<SkuScopeTemporal>(b =>
         {
-            b.ToTable(NnMgmtBillingDbProperties.DbTablePrefix + "SkuScopeHistory",
+            b.ToTable(NnMgmtBillingDbProperties.DbTablePrefix + "SkuScopeTemporal",
                 NnMgmtBillingDbProperties.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
+            b.HasKey(k => new { k.Id, k.PeriodStart });
             b.Property(x => x.ApplicationName).HasMaxLength(SkuScopeConsts.MaxApplicationNameLength);
             b.Property(x => x.Url).HasMaxLength(SkuScopeConsts.MaxUrlLength);
             b.Property(x => x.ConcurrencyStamp).HasMaxLength(ConcurrencyStampConsts.MaxLength);
 
-            b.HasIndex(u => new { u.BaseId, u.ChangeTime });
+            b.HasIndex(u => new { u.Id });
         });
     }
 }

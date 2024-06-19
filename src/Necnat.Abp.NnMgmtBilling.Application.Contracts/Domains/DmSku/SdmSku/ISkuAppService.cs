@@ -10,6 +10,6 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
             Guid,
             SkuResultRequestDto>
     {
-        Task<SkuDto> GetHistoryDetailedAsync(DateTimeOffset time, Guid id);
+        Task<SkuDto> GetTemporalDetailedAsync(DateTimeOffset time, Guid id);
     }
 }

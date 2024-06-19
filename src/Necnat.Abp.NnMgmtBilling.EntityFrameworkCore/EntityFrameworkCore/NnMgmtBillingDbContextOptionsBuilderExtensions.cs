@@ -12,10 +12,10 @@ namespace Necnat.Abp.NnMgmtBilling.EntityFrameworkCore
         {
             optionsBuilder.UseTriggers(triggerOptions =>
             {
-                triggerOptions.AddTrigger<HistoryAfterSaveTrigger<BillingContract, BillingContractHistory, Guid, IBillingContractHistoryRepository>>();
-                triggerOptions.AddTrigger<HistoryAfterSaveTrigger<Sku, SkuHistory, Guid, ISkuHistoryRepository>>();
-                triggerOptions.AddTrigger<HistoryAfterSaveTrigger<SkuPriceRange, SkuPriceRangeHistory, Guid, ISkuPriceRangeHistoryRepository>>();
-                triggerOptions.AddTrigger<HistoryAfterSaveTrigger<SkuScope, SkuScopeHistory, Guid, ISkuScopeHistoryRepository>>();
+                triggerOptions.AddTrigger<TemporalAfterSaveTrigger<BillingContract, BillingContractTemporal, Guid, IBillingContractTemporalRepository>>();
+                triggerOptions.AddTrigger<TemporalAfterSaveTrigger<Sku, SkuTemporal, Guid, ISkuTemporalRepository>>();
+                triggerOptions.AddTrigger<TemporalAfterSaveTrigger<SkuPriceRange, SkuPriceRangeTemporal, Guid, ISkuPriceRangeTemporalRepository>>();
+                triggerOptions.AddTrigger<TemporalAfterSaveTrigger<SkuScope, SkuScopeTemporal, Guid, ISkuScopeTemporalRepository>>();
             });
         }
     }

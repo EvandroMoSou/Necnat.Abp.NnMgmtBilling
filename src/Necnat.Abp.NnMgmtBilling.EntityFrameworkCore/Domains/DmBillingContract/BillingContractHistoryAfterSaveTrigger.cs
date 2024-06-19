@@ -4,9 +4,9 @@ using Volo.Abp.Timing;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
-    public class BillingContractHistoryAfterSaveTrigger : HistoryAfterSaveTrigger<BillingContract, BillingContractHistory, Guid, IBillingContractHistoryRepository>
+    public class BillingContractTemporalAfterSaveTrigger : TemporalAfterSaveTrigger<BillingContract, BillingContractTemporal, Guid, IBillingContractTemporalRepository>
     {
-        public BillingContractHistoryAfterSaveTrigger(IHistoryRepository<BillingContractHistory, Guid, BillingContract> historyRepository, IClock clock) : base(historyRepository, clock)
+        public BillingContractTemporalAfterSaveTrigger(ITemporalRepository<BillingContractTemporal, Guid, BillingContract> historyRepository, IClock clock) : base(historyRepository, clock)
         {
         }
     }
