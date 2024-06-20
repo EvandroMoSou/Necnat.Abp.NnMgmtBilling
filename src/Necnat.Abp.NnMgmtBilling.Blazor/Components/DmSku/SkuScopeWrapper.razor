@@ -1,0 +1,88 @@
+﻿@using Microsoft.Extensions.Localization;
+@using Necnat.Abp.NnLibCommon.Blazor.Components
+@using Necnat.Abp.NnLibCommon.Blazor.Extensions
+@using Necnat.Abp.NnLibCommon.Enums
+@using Necnat.Abp.NnLibCommon.Localization;
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using System.Collections.ObjectModel
+@using Volo.Abp.AspNetCore.Components
+@using Volo.Abp.Identity
+@inherits AbpComponentBase
+@inject IStringLocalizer<NnLibCommonResource> NL
+@inject IStringLocalizer<NnMgmtBillingResource> BML
+@inject ISkuScopeAppService AppService
+
+<Fields>
+    <Validation Validator="@ValidateApplicationName">
+        <Field ColumnSize="ColumnSize.Is10">
+            <FieldLabel>@BML[SkuScopeConsts.ApplicationNameDisplay]</FieldLabel>
+            <TextEdit @bind-Text="@Entity!.ApplicationName">
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </TextEdit>
+        </Field>
+    </Validation>
+    <Validation Validator="@ValidateIsBillable">
+        <Field ColumnSize="ColumnSize.Is2">
+            <FieldLabel>@BML[SkuScopeConsts.IsBillableDisplay]</FieldLabel>
+            <Check TValue="bool?" @bind-Checked="@Entity!.IsBillable">
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </Check>
+        </Field>
+    </Validation>
+</Fields>
+<Fields>
+    <Validation Validator="@ValidateHttpMethod">
+        <Field ColumnSize="ColumnSize.Is4">
+            <FieldLabel>@BML[SkuScopeConsts.HttpMethodDisplay]</FieldLabel>
+            <HttpMethodSelect SelectedValue="@Entity!.HttpMethod" />
+        </Field>
+    </Validation>
+    <Validation Validator="@ValidateUrl">
+        <Field ColumnSize="ColumnSize.Is8">
+            <FieldLabel>@BML[SkuScopeConsts.UrlDisplay]</FieldLabel>
+            <TextEdit @bind-Text="@Entity!.Url">
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </TextEdit>
+        </Field>
+    </Validation>
+</Fields>
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
+@code {
+
+    [Parameter]
+    public SkuScopeDto? Entity { get; set; }
+
+    [Parameter]
+    public EventCallback<SkuScopeDto?> EntityChanged { get; set; }
+
+    void ValidateApplicationName(ValidatorEventArgs e)
+    {
+        e.WithError(SkuScopeValidator.ValidateApplicationName((string?)e.Value, NL));
+    }
+
+    void ValidateIsBillable(ValidatorEventArgs e)
+    {
+        e.WithError(SkuScopeValidator.ValidateIsBillable((bool?)e.Value, NL));
+    }
+
+    void ValidateHttpMethod(ValidatorEventArgs e)
+    {
+        e.WithError(SkuScopeValidator.ValidateHttpMethodAndUrl(
+            e.Value == null ? null
+            : (int)e.Value == 0 ? null :
+            (HttpRequestMethod)e.Value, Entity!.Url, NL));
+    }
+
+    void ValidateUrl(ValidatorEventArgs e)
+    {
+        e.WithError(SkuScopeValidator.ValidateUrl((string?)e.Value, NL));
+    }
+}

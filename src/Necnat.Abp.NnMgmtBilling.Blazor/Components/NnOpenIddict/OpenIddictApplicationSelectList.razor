@@ -8,7 +8,7 @@
 @using System.Collections.ObjectModel
 @using Volo.Abp.AspNetCore.Components
 @using Volo.Abp.Identity
-@inherits SelectListComponent<INnOpenIddictApplicationAppService, NnOpenIddictApplicationDto, Guid, NnOpenIddictApplicationResultRequestDto>
+@inherits SelectListCmptBase<INnOpenIddictApplicationAppService, NnOpenIddictApplicationDto, Guid, NnOpenIddictApplicationResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
 
 @if (IsLoading)

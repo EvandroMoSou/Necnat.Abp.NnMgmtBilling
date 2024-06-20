@@ -1,0 +1,64 @@
+﻿@using Microsoft.Extensions.Localization;
+@using Necnat.Abp.NnLibCommon.Blazor.Extensions
+@using Necnat.Abp.NnLibCommon.Localization;
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using System.Collections.ObjectModel
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using Volo.Abp.AspNetCore.Components
+@using Volo.Abp.Identity
+@inherits AbpComponentBase
+@inject IStringLocalizer<NnLibCommonResource> NL
+@inject IStringLocalizer<NnMgmtBillingResource> BML
+@inject IBillingContractAppService AppService
+
+<Fields>
+    <Validation Validator="@ValidateCode">
+        <Field ColumnSize="ColumnSize.Is10">
+            <FieldLabel>@BML[BillingContractConsts.CodeDisplay]</FieldLabel>
+            <TextEdit @bind-Text="@Entity!.Code">
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </TextEdit>
+        </Field>
+    </Validation>
+    <Validation Validator="@ValidateIsActive">
+        <Field ColumnSize="ColumnSize.Is2">
+            <FieldLabel>@BML[BillingContractConsts.IsActiveDisplay]</FieldLabel>
+            <Check TValue="bool?" @bind-Checked="@Entity!.IsActive">
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </Check>
+        </Field>
+    </Validation>
+</Fields>
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
+@code {
+
+    [Parameter]
+    public BillingContractDto? Entity { get; set; }
+
+    [Parameter]
+    public EventCallback<BillingContractDto?> EntityChanged { get; set; }
+
+
+    void ValidateCode(ValidatorEventArgs e)
+    {
+        e.WithError(BillingContractValidator.ValidateCode((string?)e.Value, NL));
+    }
+
+    void ValidateIsActive(ValidatorEventArgs e)
+    {
+        e.WithError(BillingContractValidator.ValidateIsActive((bool?)e.Value, NL));
+    }
+}
+
+@*         public virtual Guid? BillingClientId { get; set; }
+        public virtual string? Code { get; set; }
+        public virtual DateTimeOffset? SkuReferenceTime { get; set; }
+        public virtual DateTimeOffset? EffectiveTime { get; set; }
+        public virtual Guid? AcceptanceUserId { get; set; }
+        public virtual DateTimeOffset? AcceptanceTime { get; set; }
+        public virtual bool? IsActive { get; set; } *@

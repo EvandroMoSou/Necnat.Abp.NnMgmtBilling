@@ -1,0 +1,71 @@
+﻿@using Microsoft.Extensions.Localization
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using Volo.Abp.AspNetCore.Components
+@inherits AbpComponentBase
+@inject IStringLocalizer<NnMgmtBillingResource> BML
+
+<Fields>
+    <Field ColumnSize="ColumnSize.Is12">
+        <FieldLabel>@L[SkuConsts.NameDisplay]</FieldLabel>
+        <TextEdit @bind-Text="@Entity.Name">
+            <Feedback>
+                <ValidationError />
+            </Feedback>
+        </TextEdit>
+    </Field>
+</Fields>
+<Fields>
+    @if (Entity.SkuPriceRangeList != null)
+    {
+        <DataGrid TItem="SkuPriceRangeDto"
+                  Data="Entity.SkuPriceRangeList"
+                  ShowPager="true"
+                  PageSize="5">
+            <DataGridColumns>
+                <DataGridColumn TItem="SkuPriceRangeDto"
+                                Field="@nameof(SkuPriceRangeDto.Price)"
+                                Caption="@BML[SkuPriceRangeConsts.PriceDisplay]"></DataGridColumn>
+                <DataGridColumn TItem="SkuPriceRangeDto"
+                                Field="@nameof(SkuPriceRangeDto.UpToRequestCount)"
+                                Caption="@BML[SkuPriceRangeConsts.UpToRequestCountDisplay]"></DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    }
+</Fields>
+<Fields>
+    @if (Entity.SkuScopeList != null)
+    {
+        <DataGrid TItem="SkuScopeDto"
+                  Data="Entity.SkuScopeList"
+                  ShowPager="true"
+                  PageSize="5">
+            <DataGridColumns>
+                <DataGridColumn TItem="SkuScopeDto"
+                                Field="@nameof(SkuScopeDto.ApplicationName)"
+                                Caption="@L[SkuScopeConsts.ApplicationNameDisplay]"></DataGridColumn>
+                <DataGridColumn TItem="SkuScopeDto"
+                                Field="@nameof(SkuScopeDto.HttpMethod)"
+                                Caption="@L[SkuScopeConsts.HttpMethodDisplay]">
+                    <DisplayTemplate>
+                        @context.HttpMethod.ToString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="SkuScopeDto"
+                                Field="@nameof(SkuScopeDto.Url)"
+                                Caption="@L[SkuScopeConsts.UrlDisplay]"></DataGridColumn>
+                <DataGridCheckColumn TItem="SkuScopeDto"
+                                     Field="@nameof(SkuScopeDto.IsBillable)"
+                                     Caption="@L[SkuScopeConsts.IsBillableDisplay]"></DataGridCheckColumn>
+            </DataGridColumns>
+        </DataGrid>
+    }
+</Fields>
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
+@code {
+
+    [Parameter]
+    public SkuDto Entity { get; set; } = new SkuDto();
+
+}

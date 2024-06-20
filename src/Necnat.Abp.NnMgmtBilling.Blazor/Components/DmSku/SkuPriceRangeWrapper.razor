@@ -1,0 +1,55 @@
+﻿@using Microsoft.Extensions.Localization;
+@using Necnat.Abp.NnLibCommon.Blazor.Extensions
+@using Necnat.Abp.NnLibCommon.Localization;
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using System.Collections.ObjectModel
+@using Volo.Abp.AspNetCore.Components
+@using Volo.Abp.Identity
+@inherits AbpComponentBase
+@inject IStringLocalizer<NnLibCommonResource> NL
+@inject IStringLocalizer<NnMgmtBillingResource> BML
+@inject ISkuPriceRangeAppService AppService
+
+<Fields>
+    <Validation Validator="@ValidatePrice">
+        <Field ColumnSize="ColumnSize.Is6">
+            <FieldLabel>@BML[SkuPriceRangeConsts.PriceDisplay]</FieldLabel>
+            <NumericEdit TValue="decimal?" @bind-Value="@Entity!.Price">
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </NumericEdit>
+        </Field>
+    </Validation>
+    <Validation Validator="@ValidateUpToRequestCount">
+        <Field ColumnSize="ColumnSize.Is6">
+            <FieldLabel>@BML[SkuPriceRangeConsts.UpToRequestCountDisplay]</FieldLabel>
+            <NumericEdit TValue="int?" @bind-Value="@Entity!.UpToRequestCount">
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </NumericEdit>
+        </Field>
+    </Validation>
+</Fields>
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
+@code {
+
+    [Parameter]
+    public SkuPriceRangeDto? Entity { get; set; }
+
+    [Parameter]
+    public EventCallback<SkuPriceRangeDto?> EntityChanged { get; set; }
+
+    void ValidatePrice(ValidatorEventArgs e)
+    {
+        e.WithError(SkuPriceRangeValidator.ValidatePrice((decimal?)e.Value, NL));
+    }
+
+    void ValidateUpToRequestCount(ValidatorEventArgs e)
+    {
+        e.WithError(SkuPriceRangeValidator.ValidateUpToRequestCount((int?)e.Value, NL));
+    }
+}

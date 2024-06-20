@@ -8,7 +8,7 @@
 @using System.Collections.ObjectModel
 @using Volo.Abp.AspNetCore.Components
 @using Volo.Abp.Identity
-@inherits AutocompleteComponent<INnOpenIddictApplicationAppService, NnOpenIddictApplicationDto, Guid, NnOpenIddictApplicationResultRequestDto>
+@inherits AutocompleteCmptBase<INnOpenIddictApplicationAppService, NnOpenIddictApplicationDto, Guid, NnOpenIddictApplicationResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
 
 @if (IsLoading)

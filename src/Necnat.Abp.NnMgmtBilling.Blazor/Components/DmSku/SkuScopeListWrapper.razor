@@ -1,0 +1,74 @@
+﻿@using Blazorise.Components
+@using Microsoft.Extensions.Localization;
+@using Necnat.Abp.NnLibCommon.Blazor.Components
+@using Necnat.Abp.NnLibCommon.Localization
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Volo.Abp.Identity
+@inherits ListWrapperCmptBase<ISkuScopeAppService, SkuScopeDto, Guid, SkuScopeResultRequestDto>
+@inject IStringLocalizer<NnLibCommonResource> NL
+
+<SkuScopeWrapper @bind-Entity="_entity" />
+<Fields>
+    <Field ColumnSize="ColumnSize.Is12">
+        <Button Class="float-end" Color="Color.Primary" Clicked="AddAsync" Disabled="@(_entity == null)">@NL["Add"]</Button>
+    </Field>
+</Fields>
+
+<DataGrid TItem="SkuScopeDto"
+          Data="SelectedValueList"
+          ShowPager="true"
+          PageSize="PageSize">
+    <DataGridColumns>
+        <DataGridEntityActionsColumn TItem="SkuScopeDto">
+            <DisplayTemplate>
+                <EntityActions TItem="SkuScopeDto">
+                    <EntityAction TItem="SkuScopeDto"
+                                  Text="@L["Delete"]"
+                                  Clicked="async () => await RemoveAsync(context)" />
+                </EntityActions>
+            </DisplayTemplate>
+        </DataGridEntityActionsColumn>
+        <DataGridColumn TItem="SkuScopeDto"
+                        Field="@nameof(SkuScopeDto.ApplicationName)"
+                        Caption="@L[SkuScopeConsts.ApplicationNameDisplay]"></DataGridColumn>
+        <DataGridColumn TItem="SkuScopeDto"
+                        Field="@nameof(SkuScopeDto.HttpMethod)"
+                        Caption="@L[SkuScopeConsts.HttpMethodDisplay]">
+            <DisplayTemplate>
+                @context.HttpMethod.ToString()
+            </DisplayTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="SkuScopeDto"
+                        Field="@nameof(SkuScopeDto.Url)"
+                        Caption="@L[SkuScopeConsts.UrlDisplay]"></DataGridColumn>
+        <DataGridCheckColumn TItem="SkuScopeDto"
+                             Field="@nameof(SkuScopeDto.IsBillable)"
+                             Caption="@L[SkuScopeConsts.IsBillableDisplay]"></DataGridCheckColumn>
+    </DataGridColumns>
+</DataGrid>
+@if (SelectedValueList != null)
+{
+    <br />
+    <div class="invalid-feedback-extra">@SkuValidator.ValidateSkuScopeList(SelectedValueList.ToList(), NL)</div>
+}
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
+@code {
+
+    public SkuScopeListWrapper()
+    {
+        LocalizationResource = typeof(NnLibCommonResource);
+    }
+
+    public override async Task AddAsync()
+    {
+        if (_entity != null)
+        {
+            _entity.SkuId = Guid.NewGuid();
+            if (SkuScopeValidator.Validate(_entity, NL) != null)
+                return;
+        }
+
+        await base.AddAsync();
+    }
+}

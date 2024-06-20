@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Necnat.Abp.NnLibCommon.EntityFrameworkCore" Version="0.1.11" />
+    <PackageReference Include="Necnat.Abp.NnLibCommon.EntityFrameworkCore" Version="0.1.13" />
     <PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="8.1.4" />
     <ProjectReference Include="..\Necnat.Abp.NnMgmtBilling.Domain\Necnat.Abp.NnMgmtBilling.Domain.csproj" />
   </ItemGroup>

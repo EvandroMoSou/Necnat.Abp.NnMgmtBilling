@@ -1,0 +1,119 @@
+﻿@page "/NnMgmtBilling/Dashboard"
+@using Blazorise
+@using Blazorise.Charts
+@using Blazorise.DataGrid
+@using Necnat.Abp.NnMgmtBilling.Blazor.Components
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Volo.Abp.AspNetCore.Components
+@using Volo.Abp.Users
+@inherits AbpComponentBase
+@inject IBillingEndpointAppService BillingEndpointAppService
+@inject INnOpenIddictApplicationAppService NnOpenIddictApplicationAppService
+@inject ICurrentUser CurrentUser
+
+<h2>@L["TOP 5"] - @L["Requests"]</h2>
+<br />
+@if (_lOpenIddictApplication != null)
+{
+    <Fields>
+        <Field ColumnSize="ColumnSize.Is4">
+            <FieldLabel>@L["Client"]</FieldLabel>
+            <OpenIddictApplicationSelectList Data="_lOpenIddictApplication" @bind-SelectedValue="_selectedOpenIddictApplication" />
+        </Field>
+    </Fields>
+}
+@*
+@if (_lRequestCountModel != null)
+{
+    <Row>
+        <Column ColumnSize="ColumnSize.Is6">
+            <PieChart @ref="requestChart" Style="max-height: 300px" TItem="int" Options="@requestChartOptions" />
+        </Column>
+        <Column ColumnSize="ColumnSize.Is6">
+            <DataGrid TItem="EndpointApplicationRequestCountModel"
+                      Data="_lRequestCountModel"
+                      PageSize="5">
+                <DataGridColumns>
+                    <DataGridColumn TItem="EndpointApplicationRequestCountModel"
+                                    Field="@nameof(EndpointApplicationRequestCountModel.EndpointDisplayName)"
+                                    Caption="@L["Name"]" />
+                    <DataGridColumn TItem="EndpointApplicationRequestCountModel"
+                                    Field="@nameof(EndpointApplicationRequestCountModel.RequestCount)"
+                                    Caption="@L["Request Count"]" />
+                </DataGridColumns>
+            </DataGrid>
+        </Column>
+    </Row>
+    <br />
+    <Card>
+        <CardBody>
+            <CardTitle Size="2">
+                <h2>@L["Total Request Count:"]</h2> @_lRequestCountModel.Sum(x => x.RequestCount)
+            </CardTitle>
+        </CardBody>
+    </Card>
+}*@
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Pages
+@code {
+
+    protected List<NnOpenIddictApplicationDto>? _lOpenIddictApplication;
+    protected NnOpenIddictApplicationDto? _selectedOpenIddictApplication;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+        @*
+    List<NnOpenIddictApplicationDto>? _lNnOpenIddictApplicationDto;
+    List<EndpointApplicationRequestCountModel>? _lRequestCountModel;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _lNnOpenIddictApplicationDto = (await NnOpenIddictApplicationAppService.GetListAsync(new NnOpenIddictApplicationResultRequestDto { IsPaged = false })).Items.ToList();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected async Task OnSelectedBillingAuthorizationChangedAsync(BillingAuthorizationDto? value)
+    {
+        if (value == null)
+            _lRequestCountModel = null;
+        else
+            _lRequestCountModel = await BillingEndpointAppService.GetListEndpointApplicationRequestCountModelByClientIdFromEndpointsAsync(_lNnOpenIddictApplicationDto!.First(x => x.Id == value.OpenIddictApplicationId).ClientId!);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await RequestChartHandleRedraw();
+    }
+
+    #region RequestChart
+
+    PieChart<int>? requestChart;
+    PieChartOptions requestChartOptions = new()
+        {
+            IndexAxis = "y"
+        };
+
+    async Task RequestChartHandleRedraw()
+    {
+        if (requestChart != null)
+        {
+            await requestChart.Clear();
+            await requestChart.AddLabelsDatasetsAndUpdate(_lRequestCountModel?.Take(5).Select(x => x.EndpointDisplayName).ToArray(), GetRequestChartDataset());
+        }
+    }
+
+    private PieChartDataset<int> GetRequestChartDataset()
+    {
+        return new()
+            {
+                Data = _lRequestCountModel?.Take(5).Select(x => x.RequestCount ?? 0).ToList(),
+                BackgroundColor = ChartColorConsts.BackgroundColors,
+                BorderColor = ChartColorConsts.BorderColors,
+                BorderWidth = 1
+            };
+    }
+
+    #endregion*@
+} 

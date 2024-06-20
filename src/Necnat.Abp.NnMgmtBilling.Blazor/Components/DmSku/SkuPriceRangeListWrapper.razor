@@ -1,0 +1,69 @@
+﻿@using Blazorise.Components
+@using Microsoft.Extensions.Localization;
+@using Necnat.Abp.NnLibCommon.Blazor.Components
+@using Necnat.Abp.NnLibCommon.Localization
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using Volo.Abp.Identity
+@inherits ListWrapperCmptBase<ISkuPriceRangeAppService, SkuPriceRangeDto, Guid, SkuPriceRangeResultRequestDto>
+@inject IStringLocalizer<NnLibCommonResource> NL
+@inject IStringLocalizer<NnMgmtBillingResource> BML
+
+<Fields>
+    <Field ColumnSize="ColumnSize.Is10">
+        <SkuPriceRangeWrapper @bind-Entity="_entity" />
+    </Field>
+    <Field ColumnSize="ColumnSize.Is2">
+        <FieldLabel />
+        <Button Class="w-100" Color="Color.Primary" Clicked="AddAsync" Disabled="@(_entity == null)"><i class="fas fa-plus"></i></Button>
+    </Field>
+</Fields>
+
+<DataGrid TItem="SkuPriceRangeDto"
+          Data="SelectedValueList"
+          ShowPager="true"
+          PageSize="PageSize">
+    <DataGridColumns>
+        <DataGridEntityActionsColumn TItem="SkuPriceRangeDto">
+            <DisplayTemplate>
+                <EntityActions TItem="SkuPriceRangeDto">
+                    <EntityAction TItem="SkuPriceRangeDto"
+                                  Text="@L["Delete"]"
+                                  Clicked="async () => await RemoveAsync(context)" />
+                </EntityActions>
+            </DisplayTemplate>
+        </DataGridEntityActionsColumn>
+        <DataGridColumn TItem="SkuPriceRangeDto"
+                        Field="@nameof(SkuPriceRangeDto.Price)"
+                        Caption="@BML[SkuPriceRangeConsts.PriceDisplay]"></DataGridColumn>
+        <DataGridColumn TItem="SkuPriceRangeDto"
+                        Field="@nameof(SkuPriceRangeDto.UpToRequestCount)"
+                        Caption="@BML[SkuPriceRangeConsts.UpToRequestCountDisplay]"></DataGridColumn>
+    </DataGridColumns>
+</DataGrid>
+@if (SelectedValueList != null)
+{
+    <br />
+    <div class="invalid-feedback-extra">@SkuValidator.ValidateSkuPriceRangeList(SelectedValueList.ToList(), NL)</div>
+}
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
+@code {
+
+    public SkuPriceRangeListWrapper()
+    {
+        LocalizationResource = typeof(NnLibCommonResource);
+    }
+
+    public override async Task AddAsync()
+    {
+        if (_entity != null)
+        {
+            _entity.SkuId = Guid.NewGuid();
+            if (SkuPriceRangeValidator.Validate(_entity, NL) != null)
+                return;
+        }
+
+        await base.AddAsync();
+    }
+}

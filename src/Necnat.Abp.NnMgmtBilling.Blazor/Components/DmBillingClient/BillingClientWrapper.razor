@@ -8,13 +8,12 @@
 @using Volo.Abp.Identity
 @inherits AbpComponentBase
 @inject IStringLocalizer<NnLibCommonResource> NL
-@inject IStringLocalizer<NnMgmtBillingResource> BML    
 @inject IBillingClientAppService AppService
 
 <Fields>
     <Validation Validator="@ValidateName">
         <Field ColumnSize="ColumnSize.Is10">
-            <FieldLabel>@BML[BillingClientConsts.NameDisplay]</FieldLabel>
+            <FieldLabel>@L[BillingClientConsts.NameDisplay]</FieldLabel>
             <TextEdit @bind-Text="@Entity!.Name">
                 <Feedback>
                     <ValidationError />
@@ -24,7 +23,7 @@
     </Validation>
     <Validation Validator="@ValidateIsActive">
         <Field ColumnSize="ColumnSize.Is2">
-            <FieldLabel>@BML[BillingClientConsts.IsActiveDisplay]</FieldLabel>
+            <FieldLabel>@L[BillingClientConsts.IsActiveDisplay]</FieldLabel>
             <Check TValue="bool?" @bind-Checked="@Entity!.IsActive">
                 <Feedback>
                     <ValidationError />
@@ -43,6 +42,10 @@
     [Parameter]
     public EventCallback<BillingClientDto?> EntityChanged { get; set; }
 
+    public BillingClientWrapper()
+    {
+        LocalizationResource = typeof(NnMgmtBillingResource);
+    }
 
     void ValidateName(ValidatorEventArgs e)
     {

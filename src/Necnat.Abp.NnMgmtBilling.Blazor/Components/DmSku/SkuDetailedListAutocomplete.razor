@@ -1,0 +1,84 @@
+﻿@using Blazorise.Components
+@using Microsoft.Extensions.Localization;
+@using Necnat.Abp.NnLibCommon.Blazor.Components
+@using Necnat.Abp.NnLibCommon.Localization
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using System.Text.Json
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.Identity
+@inherits ListAutocompleteCmptBase<ISkuAppService, SkuDto, Guid, SkuResultRequestDto>
+@inject IStringLocalizer<NnLibCommonResource> NL
+@inject IStringLocalizer<NnMgmtBillingResource> BML
+
+<Fields>
+    <Field ColumnSize="ColumnSize.Is10">
+        <Autocomplete @ref="_autocomplete" TItem="SkuDto"
+                      TValue="SkuDto"
+                      Data="@_readData"
+                      ReadData="@OnHandleReadDataAsync"
+                      TextField="@((item) => $"{item.Name}")"
+                      ValueField="@((item) => item)"
+                      @bind-SelectedValue="@_selectedValue"
+                      Placeholder="@(string.Format(NL["Enter at least {0} characters to start the search..."], SearchValueMinLength))"
+                      Disabled="@Disabled"
+                      Validator="Validator!"
+                      Filter="AutocompleteFilter.Contains">
+            <NotFoundContent>@string.Format(NL["Sorry... {0} was not found!"], context)</NotFoundContent>
+        </Autocomplete>
+    </Field>
+    <Field ColumnSize="ColumnSize.Is2">
+        <Button Class="w-100" Color="Color.Primary" Clicked="AddAsync" Disabled="@(_selectedValue == null)"><i class="fas fa-plus"></i></Button>
+    </Field>
+</Fields>
+<Fields>
+    @if (SelectedValueList != null)
+    {
+        @foreach (var iSelectedValue in SelectedValueList)
+        {
+            <hr />
+            <Fields>
+                <Field ColumnSize="ColumnSize.Is10">
+                    <h4>@NL["SKU"] - @iSelectedValue.Name</h4>
+                </Field>
+                <Field ColumnSize="ColumnSize.Is2">
+                    <Button Class="w-100" Color="Color.Secondary" Clicked="async () => await RemoveAsync(iSelectedValue)" Disabled="@(_selectedValue == null)"><i class="fas fa-minus"></i></Button>
+                </Field>
+            </Fields>
+            <SkuDetailedViewer Entity="iSelectedValue" />
+        }
+    }
+</Fields>
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
+@code {
+
+    [Parameter]
+    public DateTimeOffset? HistoryTime { get; set; }
+
+    public SkuDetailedListAutocomplete()
+    {
+        LocalizationResource = typeof(NnLibCommonResource);
+    }
+
+    public override async Task AddAsync()
+    {
+        if (_selectedValue != null)
+        {
+            if (AddMethod != null)
+                _selectedValue.Id = await AddMethod.Invoke(_selectedValue);
+
+            await InvokeAsync(async () =>
+            {
+                if (HistoryTime == null)
+                    SelectedValueList!.Add(_selectedValue);
+                else
+                    SelectedValueList!.Add(await AppService!.GetTemporalDetailedAsync(HistoryTime.Value, _selectedValue.Id));
+                await SelectedValueListChanged.InvokeAsync(SelectedValueList);
+
+                _selectedValue = default;
+                await _autocomplete!.Clear();
+            });
+        }
+    }
+}

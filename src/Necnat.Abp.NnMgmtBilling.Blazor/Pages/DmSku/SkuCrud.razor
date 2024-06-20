@@ -1,0 +1,369 @@
+﻿@page "/NnMgmtBilling/Configuration/Skus"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Necnat.Abp.NnLibCommon.Blazor.Helpers
+@using Necnat.Abp.NnLibCommon.Localization
+@using Necnat.Abp.NnMgmtBilling.Blazor.Components
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using Necnat.Abp.NnMgmtBilling.Permissions
+@using System.Collections.ObjectModel
+@using Volo.Abp
+@using Volo.Abp.Application.Dtos
+@using Volo.Abp.AspNetCore.Components.Web
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.Identity
+@attribute [Authorize(NnMgmtBillingPermissions.PrmSku.Default)]
+@inherits AbpCrudPageBase<ISkuAppService, SkuDto, Guid, SkuResultRequestDto>
+@inject IStringLocalizer<NnLibCommonResource> NL
+@inject IStringLocalizer<NnMgmtBillingResource> BML
+@inject ISkuAppService AppService
+@inject ISkuPriceRangeAppService SkuPriceRangeAppService
+@inject ISkuScopeAppService SkuScopeAppService
+
+<Card>
+    <CardHeader>
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <h2>@BML["SKUs"]</h2>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsAuto">
+                @if (HasCreatePermission)
+                {
+                    <Button Color="Color.Primary"
+                            Clicked="OpenCreateModalAsync">
+                        @NL["New"]
+                    </Button>
+                }
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="SkuDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  CurrentPage="CurrentPage"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="SkuDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="SkuDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="SkuDto"
+                                          Text="@(BML["Price Ranges"])"
+                                          Visible=HasUpdatePermission
+                                          Clicked="() => OpenSkuPriceRangesModalAsync(context)" />
+                            <EntityAction TItem="SkuDto"
+                                          Text="@(BML["Scopes"])"
+                                          Visible=HasUpdatePermission
+                                          Clicked="() => OpenSkuScopesModalAsync(context)" />
+                            <EntityAction TItem="SkuDto"
+                                          Text="@NL["Edit"]"
+                                          Visible=HasUpdatePermission
+                                          Clicked="() => OpenEditModalAsync(context)" />
+                            <EntityAction TItem="SkuDto"
+                                          Text="@NL["Delete"]"
+                                          Visible=HasDeletePermission
+                                          Clicked="() => DeleteEntityAsync(context)"
+                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+                <DataGridColumn TItem="SkuDto"
+                                Field="@nameof(SkuDto.Name)"
+                                Caption="@L[SkuConsts.NameDisplay]"></DataGridColumn>
+                <DataGridCheckColumn TItem="SkuDto"
+                                Field="@nameof(SkuDto.IsActive)"
+                                Caption="@L[SkuConsts.IsActiveDisplay]"></DataGridCheckColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+<Modal @ref="@CreateModal">
+    <ModalContent Centered Size="ModalSize.Large">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@NL["New"] @BML["SKU"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="true">
+                    <SkuWrapper @bind-Entity="NewEntity" />
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseCreateModalAsync">
+                    @NL["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="CreateEntityAsync">
+                    @NL["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="@EditModal">
+    <ModalContent Centered Size="ModalSize.Large">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@BML["SKU"] - @EditingEntity.Name</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="true">
+                    <SkuWrapper @bind-Entity="EditingEntity" />
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditModalAsync">
+                    @NL["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="UpdateEntityAsync">
+                    @NL["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="@_skuPriceRangesModal">
+    <ModalContent Centered Size="ModalSize.Large">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@BML["SKU"] - @EditingEntity.Name</ModalTitle>
+                <CloseButton Clicked="CloseSkuPriceRangesModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <SkuPriceRangeListWrapper @bind-SelectedValueList="_skuPriceRanges" AddMethod="CreateSkuPriceRangeAsync" RemoveMethod="DeleteSkuPriceRangeAsync" />
+                <br />
+            </ModalBody>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="@_skuScopesModal">
+    <ModalContent Centered Size="ModalSize.Large">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@BML["SKU"] - @EditingEntity.Name</ModalTitle>
+                <CloseButton Clicked="CloseSkuScopesModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <SkuScopeListWrapper @bind-SelectedValueList="_skuScopes" AddMethod="CreateSkuScopeAsync" RemoveMethod="DeleteSkuScopeAsync" />
+                <br />
+            </ModalBody>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Pages
+@code
+{
+    public SkuCrud() // Constructor
+    {
+        CreatePolicyName = NnMgmtBillingPermissions.PrmSku.Create;
+        UpdatePolicyName = NnMgmtBillingPermissions.PrmSku.Update;
+        DeletePolicyName = NnMgmtBillingPermissions.PrmSku.Delete;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OpenCreateModalAsync()
+    {
+        try
+        {
+            if (CreateValidationsRef != null)
+            {
+                await CreateValidationsRef.ClearAll();
+            }
+
+            await CheckCreatePolicyAsync();
+
+            NewEntity = new SkuDto();
+            NewEntity.IsActive = true;
+
+            // Mapper will not notify Blazor that binded values are changed
+            // so we need to notify it manually by calling StateHasChanged
+            await InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                if (CreateModal != null)
+                {
+                    await CreateModal.Show();
+                }
+
+            });
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    #region SkuPriceRange
+
+    protected Modal? _skuPriceRangesModal;
+    protected ObservableCollection<SkuPriceRangeDto>? _skuPriceRanges;
+
+    protected virtual async Task OpenSkuPriceRangesModalAsync(SkuDto entity)
+    {
+        try
+        {
+            await CheckUpdatePolicyAsync();
+
+            EditingEntityId = entity.Id;
+            EditingEntity = MapToEditingEntity(entity);
+            _skuPriceRanges = new ObservableCollection<SkuPriceRangeDto>(await SkuPriceRangeAppService.GetListBySkuIdAsync(entity.Id));
+
+            // Mapper will not notify Blazor that binded values are changed
+            // so we need to notify it manually by calling StateHasChanged
+            await InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                if (_skuPriceRangesModal != null)
+                {
+                    await _skuPriceRangesModal.Show();
+                }
+
+            });
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    protected virtual Task CloseSkuPriceRangesModalAsync()
+    {
+        _skuPriceRanges = new ObservableCollection<SkuPriceRangeDto>();
+        return InvokeAsync(_skuPriceRangesModal!.Hide);
+    }
+
+    protected virtual Task ClosingSkuPriceRangesModal(ModalClosingEventArgs eventArgs)
+    {
+        // cancel close if clicked outside of modal area
+        eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+
+        return Task.CompletedTask;
+    }
+
+
+    protected virtual async Task<Guid> CreateSkuPriceRangeAsync(SkuPriceRangeDto dto)
+    {
+        try
+        {
+            dto.SkuId = EditingEntityId;
+            var result = await SkuPriceRangeAppService.CreateAsync(dto);
+            return result.Id;
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+            return Guid.Empty;
+        }
+    }
+
+    protected virtual async Task DeleteSkuPriceRangeAsync(Guid id)
+    {
+        try
+        {
+            await SkuPriceRangeAppService.DeleteAsync(id);
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    #endregion
+
+    #region SkuScope
+
+    protected Modal? _skuScopesModal;
+    protected ObservableCollection<SkuScopeDto>? _skuScopes;
+
+    protected virtual async Task OpenSkuScopesModalAsync(SkuDto entity)
+    {
+        try
+        {
+            await CheckUpdatePolicyAsync();
+
+            EditingEntityId = entity.Id;
+            EditingEntity = MapToEditingEntity(entity);
+            _skuScopes = new ObservableCollection<SkuScopeDto>(await SkuScopeAppService.GetListBySkuIdAsync(entity.Id));
+
+            // Mapper will not notify Blazor that binded values are changed
+            // so we need to notify it manually by calling StateHasChanged
+            await InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                if (_skuScopesModal != null)
+                {
+                    await _skuScopesModal.Show();
+                }
+
+            });
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    protected virtual Task CloseSkuScopesModalAsync()
+    {
+        _skuScopes = new ObservableCollection<SkuScopeDto>();
+        return InvokeAsync(_skuScopesModal!.Hide);
+    }
+
+    protected virtual Task ClosingSkuScopesModal(ModalClosingEventArgs eventArgs)
+    {
+        // cancel close if clicked outside of modal area
+        eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+
+        return Task.CompletedTask;
+    }
+
+    protected virtual async Task<Guid> CreateSkuScopeAsync(SkuScopeDto dto)
+    {
+        try
+        {
+            dto.SkuId = EditingEntityId;
+            var result = await SkuScopeAppService.CreateAsync(dto);
+            return result.Id;
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+            return Guid.Empty;
+        }
+    }
+
+    protected virtual async Task DeleteSkuScopeAsync(Guid id)
+    {
+        try
+        {
+            await SkuScopeAppService.DeleteAsync(id);
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    #endregion
+}

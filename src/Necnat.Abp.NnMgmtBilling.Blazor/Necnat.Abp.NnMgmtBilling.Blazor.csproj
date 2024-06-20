@@ -10,11 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Components\BillingClient\BillingClientSelectList.razor" />
+    <Content Remove="Components\DmBillingClient\BillingClientSelectList.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Necnat.Abp.NnLibCommon.Blazor" Version="0.1.11" />
+    <PackageReference Include="Blazorise.Charts" Version="1.5.3" />
+    <PackageReference Include="Necnat.Abp.NnLibCommon.Blazor" Version="0.1.13" />
     <PackageReference Include="Volo.Abp.AutoMapper" Version="8.1.4" />
     <PackageReference Include="Volo.Abp.AspNetCore.Components.Web.Theming" Version="8.1.4" />
   </ItemGroup>
@@ -24,14 +25,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Components\BillingClient\BillingClientSelectList.razor" />
+    <UpToDateCheckInput Remove="Components\DmBillingClient\BillingClientSelectList.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Components\BillingClient\BillingClientSelectList.razor" />
+    <_ContentIncludedByDefault Remove="Components\DmBillingClient\BillingClientSelectList.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Components\BillingClient\BillingClientSelectList.razor" />
+    <None Include="Components\DmBillingClient\BillingClientSelectList.razor" />
   </ItemGroup>
 </Project>

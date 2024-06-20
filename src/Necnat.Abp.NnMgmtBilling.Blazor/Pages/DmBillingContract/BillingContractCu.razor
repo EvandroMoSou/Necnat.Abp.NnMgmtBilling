@@ -1,0 +1,73 @@
+﻿@page "/NnMgmtBilling/Configuration/BillingContract"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Necnat.Abp.NnLibCommon.Blazor.Pages
+@using Necnat.Abp.NnLibCommon.Localization
+@using Necnat.Abp.NnMgmtBilling.Blazor.Components
+@using Necnat.Abp.NnMgmtBilling.Domains
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using Necnat.Abp.NnMgmtBilling.Permissions
+@using System.Collections.ObjectModel
+@using Volo.Abp
+@using Volo.Abp.Application.Dtos
+@using Volo.Abp.AspNetCore.Components.Web
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.Identity
+@attribute [Authorize(NnMgmtBillingPermissions.PrmBillingContract.Default)]
+@inherits NecnatCuPageBase<IBillingContractAppService, BillingContractDto, Guid, BillingContractResultRequestDto>
+@inject IStringLocalizer<NnLibCommonResource> NL
+@inject IStringLocalizer<NnMgmtBillingResource> BML
+@inject IBillingContractAppService AppService
+
+<Card>
+    <CardHeader>
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <h2>@NL["New"] @BML["Contract"]</h2>
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <Fields>
+            <Validations @ref="@CreateValidationsRef" Model="@Entity" ValidateOnLoad="true">
+                <BillingContractWrapper @bind-Entity="Entity" />
+            </Validations>
+        </Fields>
+        <br />
+        <h3>@BML["SKUs"]</h3>
+        <Fields>
+            <SkuDetailedListAutocomplete HistoryTime="Entity.SkuReferenceTime" @bind-SelectedValueList="_skuList" />
+        </Fields>
+        <br />
+        <br />
+        <Fields>
+            <Field ColumnSize="ColumnSize.Is12">
+                <Button Class="float-start" Color="Color.Secondary" Clicked="GoBackPage">@NL["Cancel"]</Button>
+                <Button Class="float-end" Color="Color.Primary" Clicked="SaveEntityAsync">@NL["Save"]</Button>
+            </Field>
+        </Fields>
+    </CardBody>
+</Card>
+
+@namespace Necnat.Abp.NnMgmtBilling.Blazor.Pages
+@code
+{
+    protected ObservableCollection<SkuDto> _skuList = new ObservableCollection<SkuDto>();
+
+    public BillingContractCu() // Constructor
+    {
+        CreatePolicyName = NnMgmtBillingPermissions.PrmBillingContract.Create;
+        UpdatePolicyName = NnMgmtBillingPermissions.PrmBillingContract.Update;
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected override BillingContractDto InitializeCreateUpdateViewModel()
+    {
+        return new BillingContractDto { SkuReferenceTime = DateTime.Now, IsActive = true };
+    }
+
+}
