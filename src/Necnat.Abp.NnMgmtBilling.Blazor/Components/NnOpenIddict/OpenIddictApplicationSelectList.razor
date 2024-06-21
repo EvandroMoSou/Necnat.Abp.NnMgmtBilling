@@ -18,14 +18,14 @@
 else
 {
     <SelectList TItem="NnOpenIddictApplicationDto"
-                TValue="NnOpenIddictApplicationDto"
+                TValue="Guid"
                 Data="@Data"
                 TextField="@((item)=>item.DisplayName)"
-                ValueField="@((item) => item)"
+                ValueField="@((item) => item.Id)"
                 SelectedValue="@_internalSelectedValue"
                 SelectedValueChanged="@OnSelectedValueChangedAsync"
                 DefaultItemText="@NL["Select..."]"
-                DefaultItemValue="null" />
+                DefaultItemValue="default(Guid)" />
 }
 
 @namespace Necnat.Abp.NnMgmtBilling.Blazor.Components

@@ -42,7 +42,6 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
             return q;
         }
 
-
         #region Create
 
         protected override Task<BillingContractDto> CheckCreateInputAsync(BillingContractDto input)
@@ -73,7 +72,7 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
         protected override Task<BillingContractDto> CheckUpdateInputAsync(BillingContractDto input)
         {
             ThrowIfIsNotNull(BillingContractValidator.Validate(input, _necnatLocalizer));
-            if (input.SkuIdList == null)
+            if (input.SkuIdList != null)
                 throw new UserFriendlyException(L["A contract that has already been created cannot change its skus. Send and empty list."]);
 
             return Task.FromResult(input);

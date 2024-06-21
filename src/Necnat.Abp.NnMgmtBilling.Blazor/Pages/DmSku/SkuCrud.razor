@@ -144,7 +144,7 @@
                 <CloseButton Clicked="CloseSkuPriceRangesModalAsync" />
             </ModalHeader>
             <ModalBody>
-                <SkuPriceRangeListWrapper @bind-SelectedValueList="_skuPriceRanges" AddMethod="CreateSkuPriceRangeAsync" RemoveMethod="DeleteSkuPriceRangeAsync" />
+                <SkuPriceRangeObservableWrapper @bind-SelectedValueList="_skuPriceRanges" AddMethod="CreateSkuPriceRangeAsync" RemoveMethod="DeleteSkuPriceRangeAsync" />
                 <br />
             </ModalBody>
         </Form>
@@ -159,7 +159,7 @@
                 <CloseButton Clicked="CloseSkuScopesModalAsync" />
             </ModalHeader>
             <ModalBody>
-                <SkuScopeListWrapper @bind-SelectedValueList="_skuScopes" AddMethod="CreateSkuScopeAsync" RemoveMethod="DeleteSkuScopeAsync" />
+                <SkuScopeObservableWrapper @bind-SelectedValueList="_skuScopes" AddMethod="CreateSkuScopeAsync" RemoveMethod="DeleteSkuScopeAsync" />
                 <br />
             </ModalBody>
         </Form>

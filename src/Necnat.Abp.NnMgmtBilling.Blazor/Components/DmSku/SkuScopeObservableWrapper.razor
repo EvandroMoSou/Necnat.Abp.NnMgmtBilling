@@ -6,7 +6,7 @@
 @using Necnat.Abp.NnMgmtBilling.Localization
 @using Volo.Abp.BlazoriseUI.Components
 @using Volo.Abp.Identity
-@inherits SelectedEntityDtoListCmptBase<ISkuScopeAppService, SkuScopeDto, Guid, SkuScopeResultRequestDto>
+@inherits SelectedEntityDtoObservableCmptBase<ISkuScopeAppService, SkuScopeDto, Guid, SkuScopeResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
 
 <SkuScopeWrapper @bind-Entity="_internalSelectedValue" />
@@ -17,7 +17,7 @@
 </Fields>
 
 <DataGrid TItem="SkuScopeDto"
-          Data="_internalSelectedValueList"
+          Data="SelectedEntityDtoList"
           ShowPager="true"
           PageSize="PageSize">
     <DataGridColumns>
@@ -48,16 +48,16 @@
                              Caption="@L[SkuScopeConsts.IsBillableDisplay]"></DataGridCheckColumn>
     </DataGridColumns>
 </DataGrid>
-@if (_internalSelectedValueList != null)
+@if (SelectedEntityDtoList != null)
 {
     <br />
-    <div class="invalid-feedback-extra">@SkuValidator.ValidateSkuScopeList(_internalSelectedValueList.ToList(), NL)</div>
+    <div class="invalid-feedback-extra">@SkuValidator.ValidateSkuScopeList(SelectedEntityDtoList.ToList(), NL)</div>
 }
 
 @namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
 @code {
 
-    public SkuScopeListWrapper()
+    public SkuScopeObservableWrapper()
     {
         LocalizationResource = typeof(NnMgmtBillingResource);
     }

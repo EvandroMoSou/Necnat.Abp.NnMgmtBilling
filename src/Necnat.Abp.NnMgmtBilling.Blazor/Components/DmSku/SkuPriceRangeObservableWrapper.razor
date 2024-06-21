@@ -6,7 +6,7 @@
 @using Necnat.Abp.NnMgmtBilling.Localization
 @using Volo.Abp.BlazoriseUI.Components
 @using Volo.Abp.Identity
-@inherits SelectedEntityDtoListCmptBase<ISkuPriceRangeAppService, SkuPriceRangeDto, Guid, SkuPriceRangeResultRequestDto>
+@inherits SelectedEntityDtoObservableCmptBase<ISkuPriceRangeAppService, SkuPriceRangeDto, Guid, SkuPriceRangeResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
 
 <Fields>
@@ -20,7 +20,7 @@
 </Fields>
 
 <DataGrid TItem="SkuPriceRangeDto"
-          Data="_internalSelectedValueList"
+          Data="SelectedEntityDtoList"
           ShowPager="true"
           PageSize="PageSize">
     <DataGridColumns>
@@ -41,16 +41,16 @@
                         Caption="@L[SkuPriceRangeConsts.UpToRequestCountDisplay]"></DataGridColumn>
     </DataGridColumns>
 </DataGrid>
-@if (_internalSelectedValueList != null)
+@if (SelectedEntityDtoList != null)
 {
     <br />
-    <div class="invalid-feedback-extra">@SkuValidator.ValidateSkuPriceRangeList(_internalSelectedValueList.ToList(), NL)</div>
+    <div class="invalid-feedback-extra">@SkuValidator.ValidateSkuPriceRangeList(SelectedEntityDtoList.ToList(), NL)</div>
 }
 
 @namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
 @code {
 
-    public SkuPriceRangeListWrapper()
+    public SkuPriceRangeObservableWrapper()
     {
         LocalizationResource = typeof(NnMgmtBillingResource);
     }

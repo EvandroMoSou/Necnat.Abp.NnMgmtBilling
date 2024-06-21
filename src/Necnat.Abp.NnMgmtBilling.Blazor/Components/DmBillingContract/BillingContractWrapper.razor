@@ -13,31 +13,29 @@
 @inject IBillingContractAppService AppService
 
 <Fields>
-    <Validation Validator="@ValidateBillingClientId">
-        <Field ColumnSize="ColumnSize.Is4">
-            <FieldLabel>@L[BillingContractConsts.BillingClientIdDisplay]</FieldLabel>
-            <BillingClientSelectList @bind-SelectedKey="@Entity!.BillingClientId" />
-            <ValidationError />
-        </Field>
-    </Validation>
+    <Field ColumnSize="ColumnSize.Is4">
+        <FieldLabel>@L[BillingContractConsts.BillingClientIdDisplay]</FieldLabel>
+        <BillingClientSelectList @bind-SelectedKey="@Entity!.BillingClientId" />
+        <div class="invalid-feedback-extra">@BillingContractValidator.ValidateBillingClientId(Entity!.BillingClientId, NL)</div>
+    </Field>
     <Validation Validator="@ValidateSkuReferenceTime">
         <Field ColumnSize="ColumnSize.Is4">
             <FieldLabel>@L[BillingContractConsts.SkuReferenceTimeDisplay]</FieldLabel>
-            <DatePicker TValue="DateTimeOffset?" @bind-Date="@Entity!.SkuReferenceTime" InputFormat="dd/MM/yyyy HH:mm" DisplayFormat="dd/MM/yyyy HH:mm" Disabled>
+            <DateEdit TValue="DateTimeOffset?" InputMode="DateInputMode.DateTime" @bind-Date="@Entity!.SkuReferenceTime" Disabled>
                 <Feedback>
                     <ValidationError />
                 </Feedback>
-            </DatePicker>
+            </DateEdit>
         </Field>
     </Validation>
     <Validation Validator="@ValidateEffectiveTime">
         <Field ColumnSize="ColumnSize.Is4">
             <FieldLabel>@L[BillingContractConsts.EffectiveTimeDisplay]</FieldLabel>
-            <DatePicker TValue="DateTimeOffset?" @bind-Date="@Entity!.EffectiveTime" InputFormat="dd/MM/yyyy HH:mm" DisplayFormat="dd/MM/yyyy HH:mm" Disabled>
+            <DateEdit TValue="DateTimeOffset?" InputMode="DateInputMode.DateTime" @bind-Date="@Entity!.EffectiveTime">
                 <Feedback>
                     <ValidationError />
                 </Feedback>
-            </DatePicker>
+            </DateEdit>
         </Field>
     </Validation>
 </Fields>

@@ -7,7 +7,7 @@
 @using System.Text.Json
 @using Volo.Abp.BlazoriseUI.Components
 @using Volo.Abp.Identity
-@inherits ListAutocompleteCmptBase<ISkuAppService, SkuDto, Guid, SkuResultRequestDto>
+@inherits ObservableAutocompleteCmptBase<ISkuAppService, SkuDto, Guid, SkuResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
 
 <Fields>
@@ -30,9 +30,9 @@
     </Field>
 </Fields>
 <Fields>
-    @if (_internalSelectedValueList != null)
+    @if (SelectedEntityDtoList != null)
     {
-        @foreach (var iSelectedValue in _internalSelectedValueList)
+        @foreach (var iSelectedValue in SelectedEntityDtoList)
         {
             <hr />
             <Fields>
@@ -54,7 +54,7 @@
     [Parameter]
     public DateTimeOffset? HistoryTime { get; set; }
 
-    public SkuDetailedListAutocomplete()
+    public SkuDetailedObservableAutocomplete()
     {
         LocalizationResource = typeof(NnMgmtBillingResource);
     }
@@ -69,16 +69,25 @@
             await InvokeAsync(async () =>
             {
                 if (HistoryTime == null)
-                    _internalSelectedValueList!.Add(_internalSelectedValue);
+                    SelectedEntityDtoList!.Add(_internalSelectedValue);
                 else
-                    _internalSelectedValueList!.Add(await AppService!.GetTemporalDetailedAsync(HistoryTime.Value, _internalSelectedValue.Id));
+                    SelectedEntityDtoList!.Add(await AppService!.GetTemporalDetailedAsync(HistoryTime.Value, _internalSelectedValue.Id));
+            });
 
-                SelectedKeyList = _internalSelectedValueList.Select(x => x.Id).ToList();
+            await InvokeAsync(async () =>
+            {
+                SelectedKeyList = SelectedEntityDtoList!.Select(x => x.Id).ToList();
                 await SelectedKeyListChanged.InvokeAsync(SelectedKeyList);
+            });
 
-                SelectedEntityDtoList = _internalSelectedValueList.ToList();
+            await InvokeAsync(async () =>
+            {
+                SelectedEntityDtoList = SelectedEntityDtoList;
                 await SelectedEntityDtoListChanged.InvokeAsync(SelectedEntityDtoList);
+            });
 
+            await InvokeAsync(async () =>
+            {
                 await OnAfterAddAsync();
             });
         }

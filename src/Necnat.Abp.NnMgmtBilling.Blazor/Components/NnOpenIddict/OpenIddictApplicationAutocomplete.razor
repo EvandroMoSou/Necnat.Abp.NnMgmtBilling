@@ -18,11 +18,11 @@
 else
 {
     <Autocomplete TItem="NnOpenIddictApplicationDto"
-                  TValue="NnOpenIddictApplicationDto"
+                  TValue="Guid"
                   Data="@Data"
                   ReadData="@OnHandleReadData"
                   TextField="@((item) => item.DisplayName)"
-                  ValueField="@((item) => item)"
+                  ValueField="@((item) => item.Id)"
                   SelectedValue="@_internalSelectedValue"
                   SelectedValueChanged="@OnSelectedValueChangedAsync"
                   Placeholder="@string.Format(NL["Enter at least {0} character(s) to start the search..."], SearchValueMinLength)"
