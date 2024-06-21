@@ -11,7 +11,7 @@
 @inherits AutocompleteCmptBase<INnOpenIddictApplicationAppService, NnOpenIddictApplicationDto, Guid, NnOpenIddictApplicationResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
 
-@if (IsLoading)
+@if (_isLoading)
 {
     <div class="animated-background loading-input-height"></div>
 }
@@ -19,12 +19,12 @@ else
 {
     <Autocomplete TItem="NnOpenIddictApplicationDto"
                   TValue="NnOpenIddictApplicationDto"
-                  Data="@_readData"
+                  Data="@Data"
                   ReadData="@OnHandleReadData"
                   TextField="@((item) => item.DisplayName)"
                   ValueField="@((item) => item)"
-                  SelectedValue="@SelectedValue"
-                  SelectedValueChanged="@SelectedValueChanged"
+                  SelectedValue="@_internalSelectedValue"
+                  SelectedValueChanged="@OnSelectedValueChangedAsync"
                   Placeholder="@string.Format(NL["Enter at least {0} character(s) to start the search..."], SearchValueMinLength)"
                   Disabled="@Disabled"
                   Validator="Validator!"

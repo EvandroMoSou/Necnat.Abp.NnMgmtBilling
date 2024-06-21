@@ -10,13 +10,12 @@
 @using Volo.Abp.Identity
 @inherits AbpComponentBase
 @inject IStringLocalizer<NnLibCommonResource> NL
-@inject IStringLocalizer<NnMgmtBillingResource> BML
 @inject ISkuScopeAppService AppService
 
 <Fields>
     <Validation Validator="@ValidateApplicationName">
         <Field ColumnSize="ColumnSize.Is10">
-            <FieldLabel>@BML[SkuScopeConsts.ApplicationNameDisplay]</FieldLabel>
+            <FieldLabel>@L[SkuScopeConsts.ApplicationNameDisplay]</FieldLabel>
             <TextEdit @bind-Text="@Entity!.ApplicationName">
                 <Feedback>
                     <ValidationError />
@@ -26,7 +25,7 @@
     </Validation>
     <Validation Validator="@ValidateIsBillable">
         <Field ColumnSize="ColumnSize.Is2">
-            <FieldLabel>@BML[SkuScopeConsts.IsBillableDisplay]</FieldLabel>
+            <FieldLabel>@L[SkuScopeConsts.IsBillableDisplay]</FieldLabel>
             <Check TValue="bool?" @bind-Checked="@Entity!.IsBillable">
                 <Feedback>
                     <ValidationError />
@@ -38,13 +37,13 @@
 <Fields>
     <Validation Validator="@ValidateHttpMethod">
         <Field ColumnSize="ColumnSize.Is4">
-            <FieldLabel>@BML[SkuScopeConsts.HttpMethodDisplay]</FieldLabel>
+            <FieldLabel>@L[SkuScopeConsts.HttpMethodDisplay]</FieldLabel>
             <HttpMethodSelect SelectedValue="@Entity!.HttpMethod" />
         </Field>
     </Validation>
     <Validation Validator="@ValidateUrl">
         <Field ColumnSize="ColumnSize.Is8">
-            <FieldLabel>@BML[SkuScopeConsts.UrlDisplay]</FieldLabel>
+            <FieldLabel>@L[SkuScopeConsts.UrlDisplay]</FieldLabel>
             <TextEdit @bind-Text="@Entity!.Url">
                 <Feedback>
                     <ValidationError />
@@ -62,6 +61,11 @@
 
     [Parameter]
     public EventCallback<SkuScopeDto?> EntityChanged { get; set; }
+
+    public SkuScopeWrapper()
+    {
+        LocalizationResource = typeof(NnMgmtBillingResource);
+    }
 
     void ValidateApplicationName(ValidatorEventArgs e)
     {

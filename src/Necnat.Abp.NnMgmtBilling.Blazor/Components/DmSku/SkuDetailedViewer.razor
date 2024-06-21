@@ -3,7 +3,6 @@
 @using Necnat.Abp.NnMgmtBilling.Localization
 @using Volo.Abp.AspNetCore.Components
 @inherits AbpComponentBase
-@inject IStringLocalizer<NnMgmtBillingResource> BML
 
 <Fields>
     <Field ColumnSize="ColumnSize.Is12">
@@ -25,10 +24,10 @@
             <DataGridColumns>
                 <DataGridColumn TItem="SkuPriceRangeDto"
                                 Field="@nameof(SkuPriceRangeDto.Price)"
-                                Caption="@BML[SkuPriceRangeConsts.PriceDisplay]"></DataGridColumn>
+                                Caption="@L[SkuPriceRangeConsts.PriceDisplay]"></DataGridColumn>
                 <DataGridColumn TItem="SkuPriceRangeDto"
                                 Field="@nameof(SkuPriceRangeDto.UpToRequestCount)"
-                                Caption="@BML[SkuPriceRangeConsts.UpToRequestCountDisplay]"></DataGridColumn>
+                                Caption="@L[SkuPriceRangeConsts.UpToRequestCountDisplay]"></DataGridColumn>
             </DataGridColumns>
         </DataGrid>
     }
@@ -67,5 +66,10 @@
 
     [Parameter]
     public SkuDto Entity { get; set; } = new SkuDto();
+
+    public SkuDetailedViewer()
+    {
+        LocalizationResource = typeof(NnMgmtBillingResource);
+    }
 
 }

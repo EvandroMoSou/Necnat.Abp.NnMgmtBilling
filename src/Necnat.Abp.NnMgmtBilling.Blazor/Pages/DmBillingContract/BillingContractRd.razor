@@ -15,7 +15,6 @@
 @attribute [Authorize(NnMgmtBillingPermissions.PrmBillingContract.Default)]
 @inherits NecnatRdPageBase<IBillingContractAppService, BillingContractDto, Guid, BillingContractResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
-@inject IStringLocalizer<NnMgmtBillingResource> BML
 @inject IBillingContractAppService AppService
 @inject NavigationManager NavigationManager
 
@@ -23,7 +22,7 @@
     <CardHeader>
         <Row Class="justify-content-between">
             <Column ColumnSize="ColumnSize.IsAuto">
-                <h2>@BML["Contracts"]</h2>
+                <h2>@L["Contracts"]</h2>
             </Column>
             <Column ColumnSize="ColumnSize.IsAuto">
                 @if (HasCreatePermission)
@@ -64,8 +63,8 @@
                                 Field="@nameof(BillingContractDto.Code)"
                                 Caption="@L[BillingContractConsts.CodeDisplay]"></DataGridColumn>
                 <DataGridCheckColumn TItem="BillingContractDto"
-                                Field="@nameof(BillingContractDto.IsActive)"
-                                Caption="@L[BillingContractConsts.IsActiveDisplay]"></DataGridCheckColumn>
+                                     Field="@nameof(BillingContractDto.IsActive)"
+                                     Caption="@L[BillingContractConsts.IsActiveDisplay]"></DataGridCheckColumn>
             </DataGridColumns>
         </DataGrid>
     </CardBody>
@@ -76,6 +75,8 @@
 {
     public BillingContractRd() // Constructor
     {
+        LocalizationResource = typeof(NnMgmtBillingResource);
+
         ListingPageUri = "/NnMgmtBilling/Configuration/BillingContracts";
         CreatePageUri = "/NnMgmtBilling/Configuration/BillingContract";
         UpdatePageUri = "/NnMgmtBilling/Configuration/BillingContract";

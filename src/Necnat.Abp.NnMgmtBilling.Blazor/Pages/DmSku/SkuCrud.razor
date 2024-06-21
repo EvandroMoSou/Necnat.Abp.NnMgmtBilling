@@ -16,7 +16,6 @@
 @attribute [Authorize(NnMgmtBillingPermissions.PrmSku.Default)]
 @inherits AbpCrudPageBase<ISkuAppService, SkuDto, Guid, SkuResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
-@inject IStringLocalizer<NnMgmtBillingResource> BML
 @inject ISkuAppService AppService
 @inject ISkuPriceRangeAppService SkuPriceRangeAppService
 @inject ISkuScopeAppService SkuScopeAppService
@@ -25,7 +24,7 @@
     <CardHeader>
         <Row Class="justify-content-between">
             <Column ColumnSize="ColumnSize.IsAuto">
-                <h2>@BML["SKUs"]</h2>
+                <h2>@L["SKUs"]</h2>
             </Column>
             <Column ColumnSize="ColumnSize.IsAuto">
                 @if (HasCreatePermission)
@@ -51,11 +50,11 @@
                     <DisplayTemplate>
                         <EntityActions TItem="SkuDto" EntityActionsColumn="@EntityActionsColumn">
                             <EntityAction TItem="SkuDto"
-                                          Text="@(BML["Price Ranges"])"
+                                          Text="@(L["Price Ranges"])"
                                           Visible=HasUpdatePermission
                                           Clicked="() => OpenSkuPriceRangesModalAsync(context)" />
                             <EntityAction TItem="SkuDto"
-                                          Text="@(BML["Scopes"])"
+                                          Text="@(L["Scopes"])"
                                           Visible=HasUpdatePermission
                                           Clicked="() => OpenSkuScopesModalAsync(context)" />
                             <EntityAction TItem="SkuDto"
@@ -74,8 +73,8 @@
                                 Field="@nameof(SkuDto.Name)"
                                 Caption="@L[SkuConsts.NameDisplay]"></DataGridColumn>
                 <DataGridCheckColumn TItem="SkuDto"
-                                Field="@nameof(SkuDto.IsActive)"
-                                Caption="@L[SkuConsts.IsActiveDisplay]"></DataGridCheckColumn>
+                                     Field="@nameof(SkuDto.IsActive)"
+                                     Caption="@L[SkuConsts.IsActiveDisplay]"></DataGridCheckColumn>
             </DataGridColumns>
         </DataGrid>
     </CardBody>
@@ -85,7 +84,7 @@
     <ModalContent Centered Size="ModalSize.Large">
         <Form>
             <ModalHeader>
-                <ModalTitle>@NL["New"] @BML["SKU"]</ModalTitle>
+                <ModalTitle>@NL["New"] @L["SKU"]</ModalTitle>
                 <CloseButton Clicked="CloseCreateModalAsync" />
             </ModalHeader>
             <ModalBody>
@@ -113,7 +112,7 @@
     <ModalContent Centered Size="ModalSize.Large">
         <Form>
             <ModalHeader>
-                <ModalTitle>@BML["SKU"] - @EditingEntity.Name</ModalTitle>
+                <ModalTitle>@L["SKU"] - @EditingEntity.Name</ModalTitle>
                 <CloseButton Clicked="CloseEditModalAsync" />
             </ModalHeader>
             <ModalBody>
@@ -141,7 +140,7 @@
     <ModalContent Centered Size="ModalSize.Large">
         <Form>
             <ModalHeader>
-                <ModalTitle>@BML["SKU"] - @EditingEntity.Name</ModalTitle>
+                <ModalTitle>@L["SKU"] - @EditingEntity.Name</ModalTitle>
                 <CloseButton Clicked="CloseSkuPriceRangesModalAsync" />
             </ModalHeader>
             <ModalBody>
@@ -156,7 +155,7 @@
     <ModalContent Centered Size="ModalSize.Large">
         <Form>
             <ModalHeader>
-                <ModalTitle>@BML["SKU"] - @EditingEntity.Name</ModalTitle>
+                <ModalTitle>@L["SKU"] - @EditingEntity.Name</ModalTitle>
                 <CloseButton Clicked="CloseSkuScopesModalAsync" />
             </ModalHeader>
             <ModalBody>
@@ -172,6 +171,8 @@
 {
     public SkuCrud() // Constructor
     {
+        LocalizationResource = typeof(NnMgmtBillingResource);
+
         CreatePolicyName = NnMgmtBillingPermissions.PrmSku.Create;
         UpdatePolicyName = NnMgmtBillingPermissions.PrmSku.Update;
         DeletePolicyName = NnMgmtBillingPermissions.PrmSku.Delete;

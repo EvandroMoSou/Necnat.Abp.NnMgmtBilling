@@ -17,14 +17,13 @@
 @attribute [Authorize(NnMgmtBillingPermissions.PrmBillingClient.Default)]
 @inherits AbpCrudPageBase<IBillingClientAppService, BillingClientDto, Guid, BillingClientResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
-@inject IStringLocalizer<NnMgmtBillingResource> BML
 @inject IBillingClientAppService AppService
 
 <Card>
     <CardHeader>
         <Row Class="justify-content-between">
             <Column ColumnSize="ColumnSize.IsAuto">
-                <h2>@BML["Clients"]</h2>
+                <h2>@L["Clients"]</h2>
             </Column>
             <Column ColumnSize="ColumnSize.IsAuto">
                 @if (HasCreatePermission)
@@ -54,7 +53,7 @@
                                           Visible=HasUpdatePermission
                                           Clicked="() => OpenUsersModalAsync(context)" />
                             <EntityAction TItem="BillingClientDto"
-                                          Text="@("OIDC " + BML["Clients"])"
+                                          Text="@("OIDC " + L["Clients"])"
                                           Visible=HasUpdatePermission
                                           Clicked="() => OpenOidcClientModalAsync(context)" />
                             <EntityAction TItem="BillingClientDto"
@@ -71,10 +70,10 @@
                 </DataGridEntityActionsColumn>
                 <DataGridColumn TItem="BillingClientDto"
                                 Field="@nameof(BillingClientDto.Name)"
-                                Caption="@BML[BillingClientConsts.NameDisplay]"></DataGridColumn>
+                                Caption="@L[BillingClientConsts.NameDisplay]"></DataGridColumn>
                 <DataGridCheckColumn TItem="BillingClientDto"
-                                Field="@nameof(BillingClientDto.IsActive)"
-                                Caption="@BML[BillingClientConsts.IsActiveDisplay]"></DataGridCheckColumn>
+                                     Field="@nameof(BillingClientDto.IsActive)"
+                                     Caption="@L[BillingClientConsts.IsActiveDisplay]"></DataGridCheckColumn>
             </DataGridColumns>
         </DataGrid>
     </CardBody>
@@ -84,7 +83,7 @@
     <ModalContent Centered Size="ModalSize.Large">
         <Form>
             <ModalHeader>
-                <ModalTitle>@NL["New"] @BML["Client"]</ModalTitle>
+                <ModalTitle>@NL["New"] @L["Client"]</ModalTitle>
                 <CloseButton Clicked="CloseCreateModalAsync" />
             </ModalHeader>
             <ModalBody>
@@ -112,7 +111,7 @@
     <ModalContent Centered Size="ModalSize.Large">
         <Form>
             <ModalHeader>
-                <ModalTitle>@BML["Client"] - @EditingEntity.Name</ModalTitle>
+                <ModalTitle>@L["Client"] - @EditingEntity.Name</ModalTitle>
                 <CloseButton Clicked="CloseEditModalAsync" />
             </ModalHeader>
             <ModalBody>
@@ -140,7 +139,7 @@
     <ModalContent Centered Size="ModalSize.Large">
         <Form>
             <ModalHeader>
-                <ModalTitle>@BML["Client"] - @EditingEntity.Name</ModalTitle>
+                <ModalTitle>@L["Client"] - @EditingEntity.Name</ModalTitle>
                 <CloseButton Clicked="CloseUsersModalAsync" />
             </ModalHeader>
             <ModalBody>
@@ -155,7 +154,7 @@
     <ModalContent Centered Size="ModalSize.Large">
         <Form>
             <ModalHeader>
-                <ModalTitle>@BML["Client"] - @EditingEntity.Name</ModalTitle>
+                <ModalTitle>@L["Client"] - @EditingEntity.Name</ModalTitle>
                 <CloseButton Clicked="CloseOidcClientModalAsync" />
             </ModalHeader>
             <ModalBody>
@@ -171,6 +170,8 @@
 {
     public BillingClientCrud() // Constructor
     {
+        LocalizationResource = typeof(NnMgmtBillingResource);
+
         CreatePolicyName = NnMgmtBillingPermissions.PrmBillingClient.Create;
         UpdatePolicyName = NnMgmtBillingPermissions.PrmBillingClient.Update;
         DeletePolicyName = NnMgmtBillingPermissions.PrmBillingClient.Delete;

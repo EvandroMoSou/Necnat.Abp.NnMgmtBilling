@@ -42,6 +42,14 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
             return null;
         }
 
+        public static string? ValidateEffectiveTime(DateTimeOffset? value, IStringLocalizer stringLocalizer)
+        {
+            if (value == null)
+                return string.Format(stringLocalizer[ValidationMessages.Required], BillingContractConsts.EffectiveTimeDisplay);
+
+            return null;
+        }
+
         public static string? ValidateIsActive(bool? value, IStringLocalizer stringLocalizer)
         {
             if (value == null)
@@ -50,7 +58,7 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
             return null;
         }
 
-        public static string? ValidateEffectiveTime(DateTimeOffset? value, IStringLocalizer stringLocalizer)
+        public static string? ValidateSkuReferenceTime(DateTimeOffset? value, IStringLocalizer stringLocalizer)
         {
             if (value == null)
                 return string.Format(stringLocalizer[ValidationMessages.Required], BillingContractConsts.EffectiveTimeDisplay);

@@ -11,31 +11,29 @@
 @using Volo.Abp.Identity
 @inherits ListAutocompleteCmptBase<INnOpenIddictApplicationAppService, NnOpenIddictApplicationDto, Guid, NnOpenIddictApplicationResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
-@inject IStringLocalizer<NnMgmtBillingResource> BML
 
 <Fields>
     <Field ColumnSize="ColumnSize.Is10">
         <Autocomplete @ref="_autocomplete" TItem="NnOpenIddictApplicationDto"
                       TValue="NnOpenIddictApplicationDto"
-                      Data="@_readData"
+                      Data="@Data"
                       ReadData="@OnHandleReadDataAsync"
                       TextField="@((item) => $"[{item.ClientId}] {item.DisplayName}")"
                       ValueField="@((item) => item)"
-                      @bind-SelectedValue="@_selectedValue"
+                      @bind-SelectedValue="@_internalSelectedValue"
                       Placeholder="@(string.Format(NL["Enter at least {0} character(s) to start the search..."], SearchValueMinLength))"
                       Disabled="@Disabled"
-                      Validator="Validator!"
                       Filter="AutocompleteFilter.Contains">
             <NotFoundContent>@string.Format(NL["Sorry... {0} was not found!"], context)</NotFoundContent>
         </Autocomplete>
     </Field>
     <Field ColumnSize="ColumnSize.Is2">
-        <Button Class="w-100" Color="Color.Primary" Clicked="AddAsync" Disabled="@(_selectedValue == null)"><i class="fas fa-plus"></i></Button>
+        <Button Class="w-100" Color="Color.Primary" Clicked="AddAsync" Disabled="@(_internalSelectedValue == null)"><i class="fas fa-plus"></i></Button>
     </Field>
 </Fields>
 
 <DataGrid TItem="NnOpenIddictApplicationDto"
-          Data="SelectedValueList"
+          Data="_internalSelectedValueList"
           ShowPager="true"
           PageSize="PageSize">
     <DataGridColumns>
@@ -50,10 +48,10 @@
         </DataGridEntityActionsColumn>
         <DataGridColumn TItem="NnOpenIddictApplicationDto"
                         Field="@nameof(NnOpenIddictApplicationDto.ClientId)"
-                        Caption="@BML[NnOpenIddictApplicationConsts.ClientIdDisplay]"></DataGridColumn>
+                        Caption="@L[NnOpenIddictApplicationConsts.ClientIdDisplay]"></DataGridColumn>
         <DataGridColumn TItem="NnOpenIddictApplicationDto"
                         Field="@nameof(NnOpenIddictApplicationDto.DisplayName)"
-                        Caption="@BML[NnOpenIddictApplicationConsts.DisplayNameDisplay]"></DataGridColumn>
+                        Caption="@L[NnOpenIddictApplicationConsts.DisplayNameDisplay]"></DataGridColumn>
     </DataGridColumns>
 </DataGrid>
 
@@ -62,7 +60,7 @@
 
     public OpenIddictApplicationListAutocomplete()
     {
-        LocalizationResource = typeof(NnLibCommonResource);
+        LocalizationResource = typeof(NnMgmtBillingResource);
     }
 
     public override NnOpenIddictApplicationResultRequestDto GetSearchInput(string searchValue)

@@ -16,14 +16,13 @@
 @attribute [Authorize(NnMgmtBillingPermissions.PrmBillingContract.Default)]
 @inherits NecnatCuPageBase<IBillingContractAppService, BillingContractDto, Guid, BillingContractResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
-@inject IStringLocalizer<NnMgmtBillingResource> BML
 @inject IBillingContractAppService AppService
 
 <Card>
     <CardHeader>
         <Row Class="justify-content-between">
             <Column ColumnSize="ColumnSize.IsAuto">
-                <h2>@NL["New"] @BML["Contract"]</h2>
+                <h2>@NL["New"] @L["Contract"]</h2>
             </Column>
         </Row>
     </CardHeader>
@@ -34,7 +33,7 @@
             </Validations>
         </Fields>
         <br />
-        <h3>@BML["SKUs"]</h3>
+        <h3>@L["SKUs"]</h3>
         <Fields>
             <SkuDetailedListAutocomplete HistoryTime="Entity.SkuReferenceTime" @bind-SelectedValueList="_skuList" />
         </Fields>
@@ -56,6 +55,8 @@
 
     public BillingContractCu() // Constructor
     {
+        LocalizationResource = typeof(NnMgmtBillingResource);
+
         CreatePolicyName = NnMgmtBillingPermissions.PrmBillingContract.Create;
         UpdatePolicyName = NnMgmtBillingPermissions.PrmBillingContract.Update;
     }

@@ -4,7 +4,7 @@ using System;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
-    public class SkuScopeResultRequestDto : OptionalPagedAndSortedResultRequestDto
+    public class SkuScopeResultRequestDto : IdListOptionalPagedAndSortedResultRequestDto<Guid>
     {
         public Guid? SkuId { get; set; }
         public string? ApplicationNameContains { get; set; }

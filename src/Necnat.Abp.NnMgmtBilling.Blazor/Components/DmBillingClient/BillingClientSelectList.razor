@@ -8,24 +8,24 @@
 @using System.Collections.ObjectModel
 @using Volo.Abp.AspNetCore.Components
 @using Volo.Abp.Identity
-@inherits SelectListCmptBase<IBillingClientAppService, BillingClientDto, Guid, BillingClientResultRequestDto>
+@inherits SelectCmptBase<IBillingClientAppService, BillingClientDto, Guid, BillingClientResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
 
-@if (IsLoading)
+@if (_isLoading)
 {
     <div class="animated-background loading-input-height"></div>
 }
 else
 {
     <SelectList TItem="BillingClientDto"
-                TValue="Guid?"
+                TValue="BillingClientDto"
                 Data="@Data"
-                TextField="@((item)=>item.DisplayName)"
-                ValueField="@((item)=>item.Id)"
+                TextField="@((item) => item.Name)"
+                ValueField="@((item) => item)"
                 SelectedValue="@_internalSelectedValue"
                 SelectedValueChanged="@OnSelectedValueChangedAsync"
                 DefaultItemText="@NL["Select..."]"
-                DefaultItemValue="Guid.Empty" />
+                DefaultItemValue="null" />
 }
 
 @namespace Necnat.Abp.NnMgmtBilling.Blazor.Components

@@ -3,19 +3,21 @@
 @using Necnat.Abp.NnLibCommon.Blazor.Components
 @using Necnat.Abp.NnLibCommon.Localization
 @using Necnat.Abp.NnMgmtBilling.Domains
+@using Necnat.Abp.NnMgmtBilling.Localization
+@using Volo.Abp.BlazoriseUI.Components
 @using Volo.Abp.Identity
-@inherits ListWrapperCmptBase<ISkuScopeAppService, SkuScopeDto, Guid, SkuScopeResultRequestDto>
+@inherits SelectedEntityDtoListCmptBase<ISkuScopeAppService, SkuScopeDto, Guid, SkuScopeResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
 
-<SkuScopeWrapper @bind-Entity="_entity" />
+<SkuScopeWrapper @bind-Entity="_internalSelectedValue" />
 <Fields>
     <Field ColumnSize="ColumnSize.Is12">
-        <Button Class="float-end" Color="Color.Primary" Clicked="AddAsync" Disabled="@(_entity == null)">@NL["Add"]</Button>
+        <Button Class="float-end" Color="Color.Primary" Clicked="AddAsync" Disabled="@(_internalSelectedValue == null)">@NL["Add"]</Button>
     </Field>
 </Fields>
 
 <DataGrid TItem="SkuScopeDto"
-          Data="SelectedValueList"
+          Data="_internalSelectedValueList"
           ShowPager="true"
           PageSize="PageSize">
     <DataGridColumns>
@@ -46,10 +48,10 @@
                              Caption="@L[SkuScopeConsts.IsBillableDisplay]"></DataGridCheckColumn>
     </DataGridColumns>
 </DataGrid>
-@if (SelectedValueList != null)
+@if (_internalSelectedValueList != null)
 {
     <br />
-    <div class="invalid-feedback-extra">@SkuValidator.ValidateSkuScopeList(SelectedValueList.ToList(), NL)</div>
+    <div class="invalid-feedback-extra">@SkuValidator.ValidateSkuScopeList(_internalSelectedValueList.ToList(), NL)</div>
 }
 
 @namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
@@ -57,15 +59,15 @@
 
     public SkuScopeListWrapper()
     {
-        LocalizationResource = typeof(NnLibCommonResource);
+        LocalizationResource = typeof(NnMgmtBillingResource);
     }
 
     public override async Task AddAsync()
     {
-        if (_entity != null)
+        if (_internalSelectedValue != null)
         {
-            _entity.SkuId = Guid.NewGuid();
-            if (SkuScopeValidator.Validate(_entity, NL) != null)
+            _internalSelectedValue.SkuId = Guid.NewGuid();
+            if (SkuScopeValidator.Validate(_internalSelectedValue, NL) != null)
                 return;
         }
 

@@ -1,5 +1,7 @@
 ﻿@using Microsoft.Extensions.Localization;
+@using Necnat.Abp.NnLibCommon.Blazor.Components.NnIdentity
 @using Necnat.Abp.NnLibCommon.Blazor.Extensions
+@using Necnat.Abp.NnLibCommon.Extensions
 @using Necnat.Abp.NnLibCommon.Localization;
 @using Necnat.Abp.NnMgmtBilling.Domains
 @using System.Collections.ObjectModel
@@ -8,13 +10,41 @@
 @using Volo.Abp.Identity
 @inherits AbpComponentBase
 @inject IStringLocalizer<NnLibCommonResource> NL
-@inject IStringLocalizer<NnMgmtBillingResource> BML
 @inject IBillingContractAppService AppService
 
 <Fields>
+    <Validation Validator="@ValidateBillingClientId">
+        <Field ColumnSize="ColumnSize.Is4">
+            <FieldLabel>@L[BillingContractConsts.BillingClientIdDisplay]</FieldLabel>
+            <BillingClientSelectList @bind-SelectedKey="@Entity!.BillingClientId" />
+            <ValidationError />
+        </Field>
+    </Validation>
+    <Validation Validator="@ValidateSkuReferenceTime">
+        <Field ColumnSize="ColumnSize.Is4">
+            <FieldLabel>@L[BillingContractConsts.SkuReferenceTimeDisplay]</FieldLabel>
+            <DatePicker TValue="DateTimeOffset?" @bind-Date="@Entity!.SkuReferenceTime" InputFormat="dd/MM/yyyy HH:mm" DisplayFormat="dd/MM/yyyy HH:mm" Disabled>
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </DatePicker>
+        </Field>
+    </Validation>
+    <Validation Validator="@ValidateEffectiveTime">
+        <Field ColumnSize="ColumnSize.Is4">
+            <FieldLabel>@L[BillingContractConsts.EffectiveTimeDisplay]</FieldLabel>
+            <DatePicker TValue="DateTimeOffset?" @bind-Date="@Entity!.EffectiveTime" InputFormat="dd/MM/yyyy HH:mm" DisplayFormat="dd/MM/yyyy HH:mm" Disabled>
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </DatePicker>
+        </Field>
+    </Validation>
+</Fields>
+<Fields>
     <Validation Validator="@ValidateCode">
         <Field ColumnSize="ColumnSize.Is10">
-            <FieldLabel>@BML[BillingContractConsts.CodeDisplay]</FieldLabel>
+            <FieldLabel>@L[BillingContractConsts.CodeDisplay]</FieldLabel>
             <TextEdit @bind-Text="@Entity!.Code">
                 <Feedback>
                     <ValidationError />
@@ -24,7 +54,7 @@
     </Validation>
     <Validation Validator="@ValidateIsActive">
         <Field ColumnSize="ColumnSize.Is2">
-            <FieldLabel>@BML[BillingContractConsts.IsActiveDisplay]</FieldLabel>
+            <FieldLabel>@L[BillingContractConsts.IsActiveDisplay]</FieldLabel>
             <Check TValue="bool?" @bind-Checked="@Entity!.IsActive">
                 <Feedback>
                     <ValidationError />
@@ -33,6 +63,16 @@
         </Field>
     </Validation>
 </Fields>
+@if (Entity != null && Entity.AcceptanceUserId != null)
+{
+    <Fields>
+        @* <UserAutocomplete @bind-SelectedValue="Entity!.ValidateAcceptanceUserId" /> *@
+        <Field ColumnSize="ColumnSize.Is4">
+            <FieldLabel>@L[BillingContractConsts.AcceptanceTimeDisplay]</FieldLabel>
+            <DatePicker TValue="DateTimeOffset?" @bind-Date="@Entity!.AcceptanceTime" InputFormat="dd/MM/yyyy HH:mm" DisplayFormat="dd/MM/yyyy HH:mm" Disabled />
+        </Field>
+    </Fields>
+}
 
 @namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
 @code {
@@ -43,22 +83,33 @@
     [Parameter]
     public EventCallback<BillingContractDto?> EntityChanged { get; set; }
 
+    public BillingContractWrapper()
+    {
+        LocalizationResource = typeof(NnMgmtBillingResource);
+    }
+
+    void ValidateBillingClientId(ValidatorEventArgs e)
+    {
+        e.WithError(BillingContractValidator.ValidateBillingClientId((Guid?)e.Value, NL));
+    }
 
     void ValidateCode(ValidatorEventArgs e)
     {
         e.WithError(BillingContractValidator.ValidateCode((string?)e.Value, NL));
     }
 
+    void ValidateEffectiveTime(ValidatorEventArgs e)
+    {
+        e.WithError(BillingContractValidator.ValidateEffectiveTime(e.Value.ToNullableDateTimeOffset(), NL));
+    }
+
     void ValidateIsActive(ValidatorEventArgs e)
     {
         e.WithError(BillingContractValidator.ValidateIsActive((bool?)e.Value, NL));
     }
-}
 
-@*         public virtual Guid? BillingClientId { get; set; }
-        public virtual string? Code { get; set; }
-        public virtual DateTimeOffset? SkuReferenceTime { get; set; }
-        public virtual DateTimeOffset? EffectiveTime { get; set; }
-        public virtual Guid? AcceptanceUserId { get; set; }
-        public virtual DateTimeOffset? AcceptanceTime { get; set; }
-        public virtual bool? IsActive { get; set; } *@
+    void ValidateSkuReferenceTime(ValidatorEventArgs e)
+    {
+        e.WithError(BillingContractValidator.ValidateSkuReferenceTime(e.Value.ToNullableDateTimeOffset(), NL));
+    }
+}

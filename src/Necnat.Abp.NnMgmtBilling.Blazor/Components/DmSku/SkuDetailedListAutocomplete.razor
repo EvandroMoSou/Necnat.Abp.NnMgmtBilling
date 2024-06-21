@@ -9,32 +9,30 @@
 @using Volo.Abp.Identity
 @inherits ListAutocompleteCmptBase<ISkuAppService, SkuDto, Guid, SkuResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
-@inject IStringLocalizer<NnMgmtBillingResource> BML
 
 <Fields>
     <Field ColumnSize="ColumnSize.Is10">
         <Autocomplete @ref="_autocomplete" TItem="SkuDto"
                       TValue="SkuDto"
-                      Data="@_readData"
+                      Data="@Data"
                       ReadData="@OnHandleReadDataAsync"
                       TextField="@((item) => $"{item.Name}")"
                       ValueField="@((item) => item)"
-                      @bind-SelectedValue="@_selectedValue"
+                      @bind-SelectedValue="@_internalSelectedValue"
                       Placeholder="@(string.Format(NL["Enter at least {0} characters to start the search..."], SearchValueMinLength))"
                       Disabled="@Disabled"
-                      Validator="Validator!"
                       Filter="AutocompleteFilter.Contains">
             <NotFoundContent>@string.Format(NL["Sorry... {0} was not found!"], context)</NotFoundContent>
         </Autocomplete>
     </Field>
     <Field ColumnSize="ColumnSize.Is2">
-        <Button Class="w-100" Color="Color.Primary" Clicked="AddAsync" Disabled="@(_selectedValue == null)"><i class="fas fa-plus"></i></Button>
+        <Button Class="w-100" Color="Color.Primary" Clicked="AddAsync" Disabled="@(_internalSelectedValue == null)"><i class="fas fa-plus"></i></Button>
     </Field>
 </Fields>
 <Fields>
-    @if (SelectedValueList != null)
+    @if (_internalSelectedValueList != null)
     {
-        @foreach (var iSelectedValue in SelectedValueList)
+        @foreach (var iSelectedValue in _internalSelectedValueList)
         {
             <hr />
             <Fields>
@@ -42,7 +40,7 @@
                     <h4>@NL["SKU"] - @iSelectedValue.Name</h4>
                 </Field>
                 <Field ColumnSize="ColumnSize.Is2">
-                    <Button Class="w-100" Color="Color.Secondary" Clicked="async () => await RemoveAsync(iSelectedValue)" Disabled="@(_selectedValue == null)"><i class="fas fa-minus"></i></Button>
+                    <Button Class="w-100" Color="Color.Secondary" Clicked="async () => await RemoveAsync(iSelectedValue)"><i class="fas fa-minus"></i></Button>
                 </Field>
             </Fields>
             <SkuDetailedViewer Entity="iSelectedValue" />
@@ -58,26 +56,30 @@
 
     public SkuDetailedListAutocomplete()
     {
-        LocalizationResource = typeof(NnLibCommonResource);
+        LocalizationResource = typeof(NnMgmtBillingResource);
     }
 
     public override async Task AddAsync()
     {
-        if (_selectedValue != null)
+        if (_internalSelectedValue != null)
         {
             if (AddMethod != null)
-                _selectedValue.Id = await AddMethod.Invoke(_selectedValue);
+                _internalSelectedValue.Id = await AddMethod.Invoke(_internalSelectedValue);
 
             await InvokeAsync(async () =>
             {
                 if (HistoryTime == null)
-                    SelectedValueList!.Add(_selectedValue);
+                    _internalSelectedValueList!.Add(_internalSelectedValue);
                 else
-                    SelectedValueList!.Add(await AppService!.GetTemporalDetailedAsync(HistoryTime.Value, _selectedValue.Id));
-                await SelectedValueListChanged.InvokeAsync(SelectedValueList);
+                    _internalSelectedValueList!.Add(await AppService!.GetTemporalDetailedAsync(HistoryTime.Value, _internalSelectedValue.Id));
 
-                _selectedValue = default;
-                await _autocomplete!.Clear();
+                SelectedKeyList = _internalSelectedValueList.Select(x => x.Id).ToList();
+                await SelectedKeyListChanged.InvokeAsync(SelectedKeyList);
+
+                SelectedEntityDtoList = _internalSelectedValueList.ToList();
+                await SelectedEntityDtoListChanged.InvokeAsync(SelectedEntityDtoList);
+
+                await OnAfterAddAsync();
             });
         }
     }

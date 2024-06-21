@@ -8,13 +8,12 @@
 @using Volo.Abp.Identity
 @inherits AbpComponentBase
 @inject IStringLocalizer<NnLibCommonResource> NL
-@inject IStringLocalizer<NnMgmtBillingResource> BML
 @inject ISkuPriceRangeAppService AppService
 
 <Fields>
     <Validation Validator="@ValidatePrice">
         <Field ColumnSize="ColumnSize.Is6">
-            <FieldLabel>@BML[SkuPriceRangeConsts.PriceDisplay]</FieldLabel>
+            <FieldLabel>@L[SkuPriceRangeConsts.PriceDisplay]</FieldLabel>
             <NumericEdit TValue="decimal?" @bind-Value="@Entity!.Price">
                 <Feedback>
                     <ValidationError />
@@ -24,7 +23,7 @@
     </Validation>
     <Validation Validator="@ValidateUpToRequestCount">
         <Field ColumnSize="ColumnSize.Is6">
-            <FieldLabel>@BML[SkuPriceRangeConsts.UpToRequestCountDisplay]</FieldLabel>
+            <FieldLabel>@L[SkuPriceRangeConsts.UpToRequestCountDisplay]</FieldLabel>
             <NumericEdit TValue="int?" @bind-Value="@Entity!.UpToRequestCount">
                 <Feedback>
                     <ValidationError />
@@ -42,6 +41,11 @@
 
     [Parameter]
     public EventCallback<SkuPriceRangeDto?> EntityChanged { get; set; }
+
+    public SkuPriceRangeWrapper()
+    {
+        LocalizationResource = typeof(NnMgmtBillingResource);
+    }
 
     void ValidatePrice(ValidatorEventArgs e)
     {

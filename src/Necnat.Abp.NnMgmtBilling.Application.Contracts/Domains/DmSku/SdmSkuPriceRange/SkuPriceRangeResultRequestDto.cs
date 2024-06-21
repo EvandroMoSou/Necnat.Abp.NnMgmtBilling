@@ -3,7 +3,7 @@ using System;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
-    public class SkuPriceRangeResultRequestDto : OptionalPagedAndSortedResultRequestDto
+    public class SkuPriceRangeResultRequestDto : IdListOptionalPagedAndSortedResultRequestDto<Guid>
     {
         public Guid? SkuId { get; set; }
         public int? UpToRequestCount { get; set; }

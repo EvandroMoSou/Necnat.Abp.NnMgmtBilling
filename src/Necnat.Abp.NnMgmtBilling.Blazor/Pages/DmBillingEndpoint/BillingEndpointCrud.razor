@@ -15,22 +15,21 @@
 @attribute [Authorize(NnMgmtBillingPermissions.PrmBillingEndpoint.Default)]
 @inherits AbpCrudPageBase<IBillingEndpointAppService, BillingEndpointDto, Guid, BillingEndpointResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
-@inject IStringLocalizer<NnMgmtBillingResource> BML
 @inject IBillingEndpointAppService AppService
 
 <Card>
     <CardHeader>
         <Row Class="justify-content-between">
             <Column ColumnSize="ColumnSize.IsAuto">
-                <h2>@BML["Endpoints"]</h2>
+                <h2>@L["Endpoints"]</h2>
             </Column>
             <Column ColumnSize="ColumnSize.IsAuto">
                 @if (HasCreatePermission)
                 {
-                        <Button Color="Color.Primary"
-                                Clicked="OpenCreateModalAsync">
+                    <Button Color="Color.Primary"
+                            Clicked="OpenCreateModalAsync">
                         @NL["New"]
-                        </Button>
+                    </Button>
                 }
             </Column>
         </Row>
@@ -49,7 +48,7 @@
                         <EntityActions TItem="BillingEndpointDto" EntityActionsColumn="@EntityActionsColumn">
                             <EntityAction TItem="BillingEndpointDto"
                                           Text="@NL["Edit"]"
-                                          Visible=HasUpdatePermission   
+                                          Visible=HasUpdatePermission
                                           Clicked="() => OpenEditModalAsync(context)" />
                             <EntityAction TItem="BillingEndpointDto"
                                           Text="@NL["Delete"]"
@@ -61,13 +60,13 @@
                 </DataGridEntityActionsColumn>
                 <DataGridColumn TItem="BillingEndpointDto"
                                 Field="@nameof(BillingEndpointDto.DisplayName)"
-                                Caption="@BML[BillingEndpointConsts.DisplayNameDisplay]"></DataGridColumn>
+                                Caption="@L[BillingEndpointConsts.DisplayNameDisplay]"></DataGridColumn>
                 <DataGridColumn TItem="BillingEndpointDto"
                                 Field="@nameof(BillingEndpointDto.Endpoint)"
-                                Caption="@BML[BillingEndpointConsts.EndpointDisplay]"></DataGridColumn>
-                 <DataGridCheckColumn TItem="BillingEndpointDto"
-                                Field="@nameof(BillingEndpointDto.IsActive)"
-                                Caption="@BML[BillingEndpointConsts.IsActiveDisplay]"></DataGridCheckColumn>
+                                Caption="@L[BillingEndpointConsts.EndpointDisplay]"></DataGridColumn>
+                <DataGridCheckColumn TItem="BillingEndpointDto"
+                                     Field="@nameof(BillingEndpointDto.IsActive)"
+                                     Caption="@L[BillingEndpointConsts.IsActiveDisplay]"></DataGridCheckColumn>
             </DataGridColumns>
         </DataGrid>
     </CardBody>
@@ -77,7 +76,7 @@
     <ModalContent Centered Size="ModalSize.Large">
         <Form>
             <ModalHeader>
-                <ModalTitle>@NL["New"] @BML["Endpoint"]</ModalTitle>
+                <ModalTitle>@NL["New"] @L["Endpoint"]</ModalTitle>
                 <CloseButton Clicked="CloseCreateModalAsync" />
             </ModalHeader>
             <ModalBody>
@@ -105,7 +104,7 @@
     <ModalContent Centered Size="ModalSize.Large">
         <Form>
             <ModalHeader>
-                <ModalTitle>@BML["Endpoint"] - @EditingEntity.DisplayName</ModalTitle>
+                <ModalTitle>@L["Endpoint"] - @EditingEntity.DisplayName</ModalTitle>
                 <CloseButton Clicked="CloseEditModalAsync" />
             </ModalHeader>
             <ModalBody>
@@ -134,6 +133,8 @@
 {
     public BillingEndpointCrud() // Constructor
     {
+        LocalizationResource = typeof(NnMgmtBillingResource);
+
         CreatePolicyName = NnMgmtBillingPermissions.PrmBillingEndpoint.Create;
         UpdatePolicyName = NnMgmtBillingPermissions.PrmBillingEndpoint.Update;
         DeletePolicyName = NnMgmtBillingPermissions.PrmBillingEndpoint.Delete;

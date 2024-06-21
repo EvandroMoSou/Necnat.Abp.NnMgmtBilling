@@ -7,6 +7,7 @@
 
         public const string BillingClientIdDisplay = "Billing Client";
         public const string CodeDisplay = "Code";
+        public const string SkuReferenceTimeDisplay = "SKU Reference Time";        
         public const string EffectiveTimeDisplay = "Effective Time";
         public const string AcceptanceUserIdDisplay = "Acceptance User";
         public const string AcceptanceTimeDisplay = "Acceptance Time";

@@ -27,6 +27,9 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
 
             var q = await ReadOnlyRepository.GetQueryableAsync();
 
+            if (input.IdList != null)
+                q = q.Where(x => input.IdList.Contains(x.Id));
+
             if (input.SkuId != null)
                 q = q.Where(x => x.SkuId == input.SkuId);
 
