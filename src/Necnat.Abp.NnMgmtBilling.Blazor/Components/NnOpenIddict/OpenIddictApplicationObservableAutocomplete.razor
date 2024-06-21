@@ -9,7 +9,7 @@
 @using Volo.Abp.AspNetCore.Components
 @using Volo.Abp.BlazoriseUI.Components
 @using Volo.Abp.Identity
-@inherits ListAutocompleteCmptBase<INnOpenIddictApplicationAppService, NnOpenIddictApplicationDto, Guid, NnOpenIddictApplicationResultRequestDto>
+@inherits ObservableAutocompleteCmptBase<INnOpenIddictApplicationAppService, NnOpenIddictApplicationDto, Guid, NnOpenIddictApplicationResultRequestDto>
 @inject IStringLocalizer<NnLibCommonResource> NL
 
 <Fields>
@@ -33,7 +33,7 @@
 </Fields>
 
 <DataGrid TItem="NnOpenIddictApplicationDto"
-          Data="_internalSelectedValueList"
+          Data="SelectedEntityDtoList"
           ShowPager="true"
           PageSize="PageSize">
     <DataGridColumns>
@@ -58,7 +58,7 @@
 @namespace Necnat.Abp.NnMgmtBilling.Blazor.Components
 @code {
 
-    public OpenIddictApplicationListAutocomplete()
+    public OpenIddictApplicationObservableAutocomplete()
     {
         LocalizationResource = typeof(NnMgmtBillingResource);
     }

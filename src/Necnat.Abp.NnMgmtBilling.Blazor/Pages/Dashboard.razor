@@ -11,6 +11,7 @@
 @inject INnOpenIddictApplicationAppService NnOpenIddictApplicationAppService
 @inject ICurrentUser CurrentUser
 
+@*
 <h2>@L["TOP 5"] - @L["Requests"]</h2>
 <br />
 @if (_lOpenIddictApplication != null)
@@ -22,7 +23,7 @@
         </Field>
     </Fields>
 }
-@*
+
 @if (_lRequestCountModel != null)
 {
     <Row>
