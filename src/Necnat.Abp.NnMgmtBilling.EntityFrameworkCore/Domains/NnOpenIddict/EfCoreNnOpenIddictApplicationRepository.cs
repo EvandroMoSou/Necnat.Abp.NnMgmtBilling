@@ -6,9 +6,9 @@ using Volo.Abp.OpenIddict.Applications;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
-    public class EfCoreNnOpenIddictApplicationRepository : EfCoreRepository<NnMgmtBillingDbContext, OpenIddictApplication, Guid>, INnOpenIddictApplicationRepository
+    public class EfCoreNnOpenIddictApplicationRepository : EfCoreRepository<INnMgmtBillingDbContext, OpenIddictApplication, Guid>, INnOpenIddictApplicationRepository
     {
-        public EfCoreNnOpenIddictApplicationRepository(IDbContextProvider<NnMgmtBillingDbContext> dbContextProvider) : base(dbContextProvider)
+        public EfCoreNnOpenIddictApplicationRepository(IDbContextProvider<INnMgmtBillingDbContext> dbContextProvider) : base(dbContextProvider)
         {
 
         }

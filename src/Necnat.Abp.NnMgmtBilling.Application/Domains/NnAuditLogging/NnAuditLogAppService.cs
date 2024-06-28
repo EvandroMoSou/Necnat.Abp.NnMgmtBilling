@@ -9,13 +9,16 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AuditLogging;
+using Volo.Abp.Users;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
     public class NnAuditLogAppService : NecnatAppService<AuditLog, NnAuditLogDto, Guid, NnAuditLogResultRequestDto, INnAuditLogRepository>, INnAuditLogAppService
     {
-        public NnAuditLogAppService(IStringLocalizer<NnLibCommonResource> necnatLocalizer,
-            INnAuditLogRepository repository) : base(necnatLocalizer, repository)
+        public NnAuditLogAppService(
+            ICurrentUser currentUser, 
+            IStringLocalizer<NnLibCommonResource> necnatLocalizer,
+            INnAuditLogRepository repository) : base(currentUser, necnatLocalizer, repository)
         {
             GetPolicyName = NnMgmtBillingPermissions.PrmNnAuditLog.Default;
             GetListPolicyName = NnMgmtBillingPermissions.PrmNnAuditLog.Default;

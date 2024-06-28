@@ -7,13 +7,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.OpenIddict.Applications;
+using Volo.Abp.Users;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
     public class NnOpenIddictApplicationAppService : NecnatAppService<OpenIddictApplication, NnOpenIddictApplicationDto, Guid, NnOpenIddictApplicationResultRequestDto, INnOpenIddictApplicationRepository>, INnOpenIddictApplicationAppService
     {
-        public NnOpenIddictApplicationAppService(IStringLocalizer<NnLibCommonResource> necnatLocalizer,
-            INnOpenIddictApplicationRepository repository) : base(necnatLocalizer, repository)
+        public NnOpenIddictApplicationAppService(
+            ICurrentUser currentUser, 
+            IStringLocalizer<NnLibCommonResource> necnatLocalizer,
+            INnOpenIddictApplicationRepository repository) : base(currentUser, necnatLocalizer, repository)
         {
             GetPolicyName = NnMgmtBillingPermissions.PrmNnOpenIddictApplication.Default;
             GetListPolicyName = NnMgmtBillingPermissions.PrmNnOpenIddictApplication.Default;

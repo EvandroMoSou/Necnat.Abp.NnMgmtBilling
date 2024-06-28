@@ -8,13 +8,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Identity;
 using Volo.Abp.OpenIddict.Applications;
+using Volo.Abp.Users;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
     public class BillingClientAppService : NecnatAppService<BillingClient, BillingClientDto, Guid, BillingClientResultRequestDto, IBillingClientRepository>, IBillingClientAppService
     {
-        public BillingClientAppService(IStringLocalizer<NnLibCommonResource> necnatLocalizer,
-            IBillingClientRepository repository) : base(necnatLocalizer, repository)
+        public BillingClientAppService(
+            ICurrentUser currentUser,
+            IStringLocalizer<NnLibCommonResource> necnatLocalizer,
+            IBillingClientRepository repository) : base(currentUser, necnatLocalizer, repository)
         {
             GetPolicyName = NnMgmtBillingPermissions.PrmBillingClient.Default;
             GetListPolicyName = NnMgmtBillingPermissions.PrmBillingClient.Default;

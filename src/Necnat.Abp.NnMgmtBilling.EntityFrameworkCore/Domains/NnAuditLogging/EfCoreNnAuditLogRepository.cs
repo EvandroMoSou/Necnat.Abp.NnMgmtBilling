@@ -12,9 +12,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
-    public class EfCoreNnAuditLogRepository : EfCoreRepository<NnMgmtBillingDbContext, AuditLog, Guid>, INnAuditLogRepository
+    public class EfCoreNnAuditLogRepository : EfCoreRepository<INnMgmtBillingDbContext, AuditLog, Guid>, INnAuditLogRepository
     {
-        public EfCoreNnAuditLogRepository(IDbContextProvider<NnMgmtBillingDbContext> dbContextProvider) : base(dbContextProvider)
+        public EfCoreNnAuditLogRepository(IDbContextProvider<INnMgmtBillingDbContext> dbContextProvider) : base(dbContextProvider)
         {
 
         }

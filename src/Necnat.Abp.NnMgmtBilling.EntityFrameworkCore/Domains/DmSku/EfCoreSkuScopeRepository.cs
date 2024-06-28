@@ -9,9 +9,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
-    public class EfCoreSkuScopeRepository : EfCoreRepository<NnMgmtBillingDbContext, SkuScope, Guid>, ISkuScopeRepository
+    public class EfCoreSkuScopeRepository : EfCoreRepository<INnMgmtBillingDbContext, SkuScope, Guid>, ISkuScopeRepository
     {
-        public EfCoreSkuScopeRepository(IDbContextProvider<NnMgmtBillingDbContext> dbContextProvider) : base(dbContextProvider)
+        public EfCoreSkuScopeRepository(IDbContextProvider<INnMgmtBillingDbContext> dbContextProvider) : base(dbContextProvider)
         {
 
         }

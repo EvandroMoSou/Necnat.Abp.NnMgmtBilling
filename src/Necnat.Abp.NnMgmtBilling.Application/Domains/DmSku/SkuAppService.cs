@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Users;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
@@ -19,13 +20,14 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
         protected readonly ISkuScopeRepository _skuScopeRepository;
 
         public SkuAppService(
+            ICurrentUser currentUser,
             IStringLocalizer<NnLibCommonResource> necnatLocalizer,
             ISkuRepository repository,
             ISkuTemporalRepository skuTemporalRepository,
             ISkuPriceRangeTemporalRepository skuPriceRangeTemporalRepository,
             ISkuPriceRangeRepository skuPriceRangeRepository,
             ISkuScopeTemporalRepository skuScopeTemporalRepository,
-            ISkuScopeRepository skuScopeRepository) : base(necnatLocalizer, repository)
+            ISkuScopeRepository skuScopeRepository) : base(currentUser, necnatLocalizer, repository)
         {
             _skuTemporalRepository = skuTemporalRepository;
             _skuPriceRangeTemporalRepository = skuPriceRangeTemporalRepository;

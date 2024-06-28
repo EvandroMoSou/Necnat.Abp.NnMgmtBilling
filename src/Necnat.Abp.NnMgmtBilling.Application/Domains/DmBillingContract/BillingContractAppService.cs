@@ -6,13 +6,16 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Users;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
     public class BillingContractAppService : NecnatAppService<BillingContract, BillingContractDto, Guid, BillingContractResultRequestDto, IBillingContractRepository>, IBillingContractAppService
     {
-        public BillingContractAppService(IStringLocalizer<NnLibCommonResource> necnatLocalizer,
-            IBillingContractRepository repository) : base(necnatLocalizer, repository)
+        public BillingContractAppService(
+            ICurrentUser currentUser,
+            IStringLocalizer<NnLibCommonResource> necnatLocalizer,
+            IBillingContractRepository repository) : base(currentUser, necnatLocalizer, repository)
         {
             GetPolicyName = NnMgmtBillingPermissions.PrmBillingContract.Default;
             GetListPolicyName = NnMgmtBillingPermissions.PrmBillingContract.Default;

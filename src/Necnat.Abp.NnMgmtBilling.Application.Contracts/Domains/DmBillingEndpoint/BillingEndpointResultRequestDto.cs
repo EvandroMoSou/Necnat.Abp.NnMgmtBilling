@@ -6,5 +6,6 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
     {
         public string? DisplayNameContains { get; set; }
         public string? EndpointContains { get; set; }
+        public bool? IsActive { get; set; }
     }
 }

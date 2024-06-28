@@ -6,19 +6,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Users;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
     public class SkuScopeAppService : NecnatAppService<SkuScope, SkuScopeDto, Guid, SkuScopeResultRequestDto, ISkuScopeRepository>, ISkuScopeAppService
     {
-        public SkuScopeAppService(IStringLocalizer<NnLibCommonResource> necnatLocalizer,
-            ISkuScopeRepository repository) : base(necnatLocalizer, repository)
+        public SkuScopeAppService(
+            ICurrentUser currentUser,
+            IStringLocalizer<NnLibCommonResource> necnatLocalizer,
+            ISkuScopeRepository repository) : base(currentUser, necnatLocalizer, repository)
         {
-            GetPolicyName = NnMgmtBillingPermissions.PrmSkuScope.Default;
-            GetListPolicyName = NnMgmtBillingPermissions.PrmSkuScope.Default;
-            CreatePolicyName = NnMgmtBillingPermissions.PrmSkuScope.Create;
-            UpdatePolicyName = NnMgmtBillingPermissions.PrmSkuScope.Update;
-            DeletePolicyName = NnMgmtBillingPermissions.PrmSkuScope.Delete;
         }
 
         protected override async Task<IQueryable<SkuScope>> CreateFilteredQueryAsync(SkuScopeResultRequestDto input)

@@ -6,13 +6,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Users;
 
 namespace Necnat.Abp.NnMgmtBilling.Domains
 {
     public class SkuPriceRangeAppService : NecnatAppService<SkuPriceRange, SkuPriceRangeDto, Guid, SkuPriceRangeResultRequestDto, ISkuPriceRangeRepository>, ISkuPriceRangeAppService
     {
-        public SkuPriceRangeAppService(IStringLocalizer<NnLibCommonResource> necnatLocalizer,
-            ISkuPriceRangeRepository repository) : base(necnatLocalizer, repository)
+        public SkuPriceRangeAppService(
+            ICurrentUser currentUser,
+            IStringLocalizer<NnLibCommonResource> necnatLocalizer,
+            ISkuPriceRangeRepository repository) : base(currentUser, necnatLocalizer, repository)
         {
             GetPolicyName = NnMgmtBillingPermissions.PrmSkuPriceRange.Default;
             GetListPolicyName = NnMgmtBillingPermissions.PrmSkuPriceRange.Default;

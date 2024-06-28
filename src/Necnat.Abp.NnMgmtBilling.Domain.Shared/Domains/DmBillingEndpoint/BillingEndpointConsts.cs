@@ -8,6 +8,5 @@
         public const string DisplayNameDisplay = "Display Name";
         public const string EndpointDisplay = "Endpoint";
         public const string IsActiveDisplay = "Active";
-
     }
 }

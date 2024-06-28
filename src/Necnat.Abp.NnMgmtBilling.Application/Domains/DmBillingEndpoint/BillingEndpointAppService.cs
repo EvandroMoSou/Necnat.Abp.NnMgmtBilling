@@ -20,17 +20,17 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
     public class BillingEndpointAppService : NecnatAppService<BillingEndpoint, BillingEndpointDto, Guid, BillingEndpointResultRequestDto, IBillingEndpointRepository>, IBillingEndpointAppService
     {
         protected readonly IBillingClientRepository _billingClientRepository;
-        protected readonly ICurrentUser _currentUser;
         protected readonly IHttpContextAccessor _httpContextAccessor;
 
-        public BillingEndpointAppService(IStringLocalizer<NnLibCommonResource> necnatLocalizer,
+        public BillingEndpointAppService(
+            ICurrentUser currentUser, 
+            IStringLocalizer<NnLibCommonResource> necnatLocalizer,
             IBillingEndpointRepository repository,
             IBillingClientRepository billingClientRepository,
-            ICurrentUser currentUser,
-            IHttpContextAccessor httpContextAccessor) : base(necnatLocalizer, repository)
+
+            IHttpContextAccessor httpContextAccessor) : base(currentUser, necnatLocalizer, repository)
         {
             _billingClientRepository = billingClientRepository;
-            _currentUser = currentUser;
             _httpContextAccessor = httpContextAccessor;
 
             GetPolicyName = NnMgmtBillingPermissions.PrmBillingEndpoint.Default;
@@ -51,6 +51,9 @@ namespace Necnat.Abp.NnMgmtBilling.Domains
 
             if (!string.IsNullOrWhiteSpace(input.EndpointContains))
                 q = q.Where(x => x.Endpoint.Contains(input.EndpointContains));
+
+            if (input.IsActive != null)
+                q = q.Where(x => x.IsActive == input.IsActive);
 
             return q;
         }
